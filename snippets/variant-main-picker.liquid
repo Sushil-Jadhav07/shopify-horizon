@@ -39,6 +39,11 @@
         {%- liquid
           assign swatch_count = product_option.values | map: 'swatch' | compact | size
           assign variant_style = block_settings.variant_style
+          assign option_name_downcase = product_option.name | downcase
+          assign is_size_option = false
+          if option_name_downcase contains 'size'
+            assign is_size_option = true
+          endif
 
           if swatch_count > 0 and block_settings.show_swatches
             if block_settings.variant_style == 'dropdown'
@@ -77,7 +82,19 @@
             {{ option_id_attribute }}
           >
             <legend>
-              {{ product_option.name | escape -}}
+              {% if is_size_option %}
+                select a size
+                <button
+                  type="button"
+                  class="ensne-size-guide-trigger button-unstyled"
+                  on:click="#ensne-size-guide-{{ product_resource.id }}/showDialog"
+                  aria-haspopup="dialog"
+                >
+                  guide
+                </button>
+              {% else %}
+                {{ product_option.name | escape -}}
+              {% endif %}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
