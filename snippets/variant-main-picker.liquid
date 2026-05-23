@@ -75,27 +75,28 @@
           </div>
         {%- elsif variant_style == 'swatch' or block_settings.variant_style == 'buttons' -%}
           {%- assign fieldset_index = forloop.index0 -%}
+          {% if is_size_option %}
+            <div class="ensne-size-guide-row">
+              <span class="ensne-size-guide-label">select a size</span>
+              <button
+                type="button"
+                class="ensne-size-guide-trigger button-unstyled"
+                on:click="#ensne-size-guide-{{ product_resource.id }}/showDialog"
+                onclick="document.getElementById('ensne-size-guide-{{ product_resource.id }}')?.showDialog(); return false;"
+                aria-haspopup="dialog"
+              >
+                guide
+              </button>
+            </div>
+          {% endif %}
           <fieldset
             class="variant-option variant-option--buttons{% if variant_style == 'swatch' %} variant-option--swatches{% else %} variant-option--{{ settings.variant_button_width }}{% endif %}"
             data-fieldset-index="{{ fieldset_index }}"
             ref="fieldsets[]"
             {{ option_id_attribute }}
           >
-            <legend>
-              {% if is_size_option %}
-                select a size
-                <button
-                  type="button"
-                  class="ensne-size-guide-trigger button-unstyled"
-                  on:click="#ensne-size-guide-{{ product_resource.id }}/showDialog"
-                  onclick="document.getElementById('ensne-size-guide-{{ product_resource.id }}')?.showDialog(); return false;"
-                  aria-haspopup="dialog"
-                >
-                  guide
-                </button>
-              {% else %}
-                {{ product_option.name | escape -}}
-              {% endif %}
+            <legend{% if is_size_option %} class="visually-hidden"{% endif %}>
+              {{ product_option.name | escape -}}
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
