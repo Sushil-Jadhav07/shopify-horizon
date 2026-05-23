@@ -6,285 +6,304 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "ensne_hero_PYYwhp": {
+      "type": "ensne-hero",
+      "name": "ENSNE Hero",
+      "settings": {
+        "brand_name": "ENSNE",
+        "pronunciation": "pronounced /en'sein/",
+        "hero_copy": "<p>we are an <em>\"artleisure\"</em> brand, and for our first collection we are serving a seven course indulgence — <em><strong>the tasting menu</strong></em>, curated with blah and blah.</p>",
+        "next_serving_label": "next serving [ 05 / 05 ]",
+        "cta_label": "",
+        "cta_link": "",
+        "background_video": "",
+        "img_pos_x": 50,
+        "img_pos_y": 50,
+        "img_filter": "sepia",
+        "filter_intensity": 40,
+        "img_brightness": 80,
+        "img_contrast": 110,
+        "tint_colour": "#000000",
+        "tint_opacity": 0,
+        "bg_colour": "#000000",
+        "wordmark_colour": "#000000",
+        "pronunciation_colour": "#ededed",
+        "copy_colour": "#ededed",
+        "serving_colour": "#ededed",
+        "cta_text_colour": "#ffffff",
+        "cta_border_colour": "#ffffff",
+        "wordmark_size": 17,
+        "copy_size": 1.1,
+        "copy_width": 28,
+        "copy_bottom": 5,
+        "copy_left": 5,
+        "pronunciation_top": 31,
+        "section_height": 100,
+        "mobile_height": 85
+      }
+    },
+    "ensne_tasting_menu_44NnQE": {
+      "type": "ensne-tasting-menu",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "menu_item_Yr6V6q": {
+          "type": "menu_item",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground-heading)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "item_label": "Appetizers",
+            "item_link": ""
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "menu_item_4d9tXg": {
+          "type": "menu_item",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-secondary",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "item_label": "Cocktails",
+            "item_link": ""
+          }
+        },
+        "menu_item_mAcGTN": {
+          "type": "menu_item",
+          "settings": {
+            "item_label": "Entrees",
+            "item_link": ""
+          }
+        },
+        "menu_item_796jTf": {
+          "type": "menu_item",
+          "settings": {
+            "item_label": "Palate Cleansers",
+            "item_link": ""
+          }
+        },
+        "menu_item_mQfwUG": {
+          "type": "menu_item",
+          "settings": {
+            "item_label": "Desserts",
+            "item_link": ""
+          }
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
+        "menu_item_Yr6V6q",
+        "menu_item_4d9tXg",
+        "menu_item_mAcGTN",
+        "menu_item_796jTf",
+        "menu_item_mQfwUG"
       ],
-      "name": "t:names.hero",
+      "name": "ENSNE Tasting Menu",
       "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-6",
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "left_col_width": 60,
+        "section_padding_top": 40,
+        "section_padding_bottom": 48,
+        "section_padding_left": 76,
+        "section_padding_right": 20,
+        "headline_to_menu_gap": 44,
+        "headline_pre": "THE",
+        "headline_line1": "TASTING",
+        "headline_line2": "MENU",
+        "pre_font_size": 32,
+        "pre_font_weight": 900,
+        "pre_letter_spacing": 4,
+        "pre_bottom_gap": 0,
+        "headline_font_size": 112,
+        "headline_font_weight": 900,
+        "headline_line_height": 88,
+        "headline_letter_spacing": -1,
+        "subtitle": "<p>A limited run of drops - served in small batches, just enough to give you a <strong>taste of what we have been cooking.</strong></p>",
+        "menu_subtitle_gap": 16,
+        "subtitle_top_offset": 14,
+        "subtitle_width": 172,
+        "subtitle_font_size": 11,
+        "subtitle_font_weight": 400,
+        "subtitle_line_height": 175,
+        "subtitle_letter_spacing": 4,
+        "subtitle_accent_weight": 700,
+        "item_font_size": 26,
+        "item_font_weight": 700,
+        "item_letter_spacing": 8,
+        "item_padding_v": 9,
+        "patch_top": 5,
+        "patch_height": 36,
+        "patch_max_width": 400,
+        "patch_padding_h": 6,
+        "patch_colour": "#811313",
+        "headline_colour": "#111111",
+        "subtitle_colour": "#1a1a1a",
+        "accent_colour": "#811313",
+        "menu_colour": "#111111",
+        "menu_active_colour": "#811313",
+        "bg_colour": "#e8e3d8",
+        "bg_opacity": 100,
+        "img_width": 520,
+        "img_height": 680,
+        "img_bleed_right": 20
       }
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "ensne_product_editorial_t3w8pe": {
+      "type": "ensne-product-editorial",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "editorial_eVXnWU": {
+          "type": "editorial",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "color": "var(--color-foreground)",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "category_label": "APPETIZERS",
+            "product": "",
+            "custom_product_name": "frame necklace",
+            "custom_product_price": "₹1,700",
+            "custom_product_link": ""
+          }
         }
       },
-      "name": "Featured collection",
+      "block_order": [
+        "editorial_eVXnWU"
+      ],
+      "name": "ENSNE Editorial Product",
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "enable_parallax": true,
+        "img_height": 70,
+        "img_height_mobile": 55,
+        "block_gap": 0,
+        "show_cta": true,
+        "cta_label": "Shop now",
+        "bg_colour": "#f5f2ee",
+        "label_bg_colour": "#f5f2ee",
+        "label_colour": "#811313",
+        "label_accent_colour": "#811313",
+        "product_name_colour": "#ededed",
+        "product_price_colour": "#ededed",
+        "cta_text_colour": "#ffffff",
+        "cta_border_colour": "#ffffff"
+      }
+    },
+    "ensne_product_grid_xeR6mf": {
+      "type": "ensne-product-grid",
+      "blocks": {
+        "product_card_xVQQNx": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "frame necklace",
+            "custom_price": "₹1,700",
+            "custom_link": "",
+            "hover_effect": "zoom-in"
+          }
+        },
+        "product_card_UwaUNa": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "custom_name": "three magical words",
+            "custom_price": "₹15,000",
+            "custom_link": "",
+            "hover_effect": "pan-up"
+          }
+        }
+      },
+      "block_order": [
+        "product_card_xVQQNx",
+        "product_card_UwaUNa"
+      ],
+      "name": "ENSNE Product Grid",
+      "settings": {
+        "columns": 2,
+        "columns_mobile": 2,
+        "card_gap": 16,
+        "card_height": 65,
+        "card_height_mobile": 50,
+        "card_radius": 0,
+        "default_hover": "zoom-in",
+        "hover_duration": 500,
+        "hover_easing": "ease-out",
+        "show_badge": true,
+        "badge_label": "Quick shop",
+        "bg_colour": "#f0ece4",
+        "gradient_strength": 60,
+        "product_name_colour": "#ededed",
+        "product_price_colour": "#ededed",
+        "badge_text_colour": "#000000",
+        "badge_bg_colour": "#ededed"
+      }
+    },
+    "ensne_product_editorial_4pBdtN": {
+      "type": "ensne-product-editorial",
+      "blocks": {
+        "editorial_xkBMWQ": {
+          "type": "editorial",
+          "settings": {
+            "category_label": "APPETIZERS",
+            "product": "",
+            "custom_product_name": "frame necklace",
+            "custom_product_price": "₹1,700",
+            "custom_product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "editorial_xkBMWQ"
+      ],
+      "name": "ENSNE Editorial Product",
+      "settings": {
+        "enable_parallax": false,
+        "img_height": 70,
+        "img_height_mobile": 55,
+        "block_gap": 0,
+        "show_cta": true,
+        "cta_label": "Shop now",
+        "bg_colour": "#f5f2ee",
+        "label_bg_colour": "#f5f2ee",
+        "label_colour": "#811313",
+        "label_accent_colour": "#811313",
+        "product_name_colour": "#ededed",
+        "product_price_colour": "#ededed",
+        "cta_text_colour": "#ffffff",
+        "cta_border_colour": "#ffffff"
+      }
+    },
+    "ensne_early_access_q6nMdr": {
+      "type": "ensne-early-access",
+      "name": "ENSNE Early Access",
+      "settings": {
+        "section_label": "EN TR EES",
+        "img_grayscale": 100,
+        "img_blur": 3,
+        "img_brightness": 80,
+        "img_contrast": 95,
+        "img_pos_x": 50,
+        "img_pos_y": 30,
+        "overlay_colour": "#ffffff",
+        "overlay_opacity": 10,
+        "serving_text": "serving [ 18 / 05 ]",
+        "pill_placeholder": "enter code",
+        "access_codes": "ensne2025, tasting, vip",
+        "success_redirect": "",
+        "msg_success": "Access granted - redirecting...",
+        "msg_wrong": "Incorrect code. Try again.",
+        "msg_empty": "Please enter your access code.",
+        "community_line1": "24 hour early access to our",
+        "community_link_text": "ENSNE community *",
+        "community_link": "",
+        "community_line2": "[ 17 / 05 ]",
+        "footer_note": "* If you've ordered before, you already have a seat at our table reserved. Check inbox or WhatsApp us for the early access code.",
+        "bg_colour": "#d8d4cc",
+        "label_bg_colour": "#e8e4dc",
+        "label_colour": "#811313",
+        "accent_colour": "#811313",
+        "serving_colour": "#ffffff",
+        "pill_bg_colour": "#e8e4dc",
+        "pill_border_colour": "#811313",
+        "pill_text_colour": "#811313",
+        "pill_placeholder_colour": "#811313",
+        "body_colour": "#ffffff",
+        "note_colour": "#811313"
       }
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "ensne_hero_PYYwhp",
+    "ensne_tasting_menu_44NnQE",
+    "ensne_product_editorial_t3w8pe",
+    "ensne_product_grid_xeR6mf",
+    "ensne_product_editorial_4pBdtN",
+    "ensne_early_access_q6nMdr"
   ]
 }
