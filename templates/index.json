@@ -154,6 +154,7 @@
           "type": "editorial",
           "settings": {
             "category_label": "APPETIZERS",
+            "editorial_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_22_13_AM.png",
             "product": "",
             "custom_product_name": "frame necklace",
             "custom_product_price": "₹1,700",
@@ -189,6 +190,7 @@
           "type": "product_card",
           "settings": {
             "product": "",
+            "card_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_24_10_AM.png",
             "custom_name": "frame necklace",
             "custom_price": "₹1,700",
             "custom_link": "",
@@ -199,6 +201,7 @@
           "type": "product_card",
           "settings": {
             "product": "",
+            "card_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_26_26_AM.png",
             "custom_name": "three magical words",
             "custom_price": "₹15,000",
             "custom_link": "",
@@ -238,6 +241,7 @@
           "type": "editorial",
           "settings": {
             "category_label": "APPETIZERS",
+            "editorial_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_31_22_AM.png",
             "product": "",
             "custom_product_name": "frame necklace",
             "custom_product_price": "₹1,700",
