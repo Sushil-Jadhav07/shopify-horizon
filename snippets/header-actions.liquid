@@ -121,30 +121,38 @@
     ></script>
 
     {% capture empty_cart_drawer_content %}
-      <div class="cart-drawer__header">
-        <button
-          ref="closeButton"
-          on:click="cart-drawer-component/close"
-          class="button close-button cart-drawer__close-button button-unstyled"
-          aria-label="{{ 'actions.close_dialog' | t }}"
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-close.svg' | inline_asset_content -}}
-          </span>
-        </button>
+      <div class="cart-drawer__header ensne-cart-drawer__header">
+        <div class="ensne-cart-drawer__top-row">
+          <h2
+            class="cart-drawer__heading ensne-cart-drawer__heading"
+            id="cart-drawer-heading-empty"
+          >
+            YOUR BAG<span class="ensne-cart-drawer__count">&#8202;[&#8202;00&#8202;]</span>
+          </h2>
+          <button
+            ref="closeButton"
+            on:click="cart-drawer-component/close"
+            class="button close-button cart-drawer__close-button button-unstyled"
+            aria-label="{{ 'actions.close_dialog' | t }}"
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-close.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+        <div class="ensne-cart-drawer__divider"></div>
+        <div class="ensne-cart-drawer__bottom-row">
+          <span class="ensne-cart-drawer__serving-tag">serving soon</span>
+        </div>
       </div>
 
       <div
         class="cart-drawer__content"
         aria-label="{{ 'accessibility.cart' | t }}"
       >
-        <h2
-          class="cart-drawer__heading h4 cart-drawer__heading--empty"
-          id="cart-drawer-heading-empty"
-        >
-          {{ 'content.your_cart_is_empty' | t }}
-        </h2>
-
+        <div class="ensne-cart-empty">
+          <p class="ensne-cart-empty__text">your bag is empty</p>
+        </div>
         <div class="cart-drawer__items">
           {% render 'cart-products', force_empty: true %}
         </div>
@@ -197,27 +205,29 @@
                 class="cart-drawer__header ensne-cart-drawer__header"
                 id="cart-drawer-header"
               >
-                <div class="ensne-cart-drawer__title-row">
+                <div class="ensne-cart-drawer__top-row">
                   {%- assign ensne_count_padded = cart.item_count | prepend: '0' | slice: -2, 2 -%}
                   <h2
                     class="cart-drawer__heading ensne-cart-drawer__heading"
                     id="cart-drawer-heading"
                   >
-                    YOUR BAG<span class="ensne-cart-drawer__count">[ {{ ensne_count_padded }} ]</span>
+                    YOUR BAG<span class="ensne-cart-drawer__count">&#8202;[&#8202;{{ ensne_count_padded }}&#8202;]</span>
                   </h2>
+                  <button
+                    ref="closeButton"
+                    on:click="cart-drawer-component/close"
+                    class="button close-button cart-drawer__close-button button-unstyled"
+                    aria-label="{{ 'actions.close_dialog' | t }}"
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-close.svg' | inline_asset_content -}}
+                    </span>
+                  </button>
+                </div>
+                <div class="ensne-cart-drawer__divider"></div>
+                <div class="ensne-cart-drawer__bottom-row">
                   <span class="ensne-cart-drawer__serving-tag">serving soon</span>
                 </div>
-
-                <button
-                  ref="closeButton"
-                  on:click="cart-drawer-component/close"
-                  class="button close-button cart-drawer__close-button button-unstyled"
-                  aria-label="{{ 'actions.close_dialog' | t }}"
-                >
-                  <span class="svg-wrapper">
-                    {{- 'icon-close.svg' | inline_asset_content -}}
-                  </span>
-                </button>
               </div>
 
               <scroll-hint
