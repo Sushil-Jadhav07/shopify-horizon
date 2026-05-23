@@ -79,6 +79,13 @@
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
+    "blocks": {
+      "12695309257651622986": {
+        "type": "shopify://apps/sectionhub/blocks/app-embed/9b74df56-d9a0-4a6f-8248-1a8825110996",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_schemes": {
       "scheme-1": {
         "settings": {
