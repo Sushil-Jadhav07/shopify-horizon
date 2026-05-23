@@ -19,6 +19,7 @@
         "next_serving_label": "next serving [ 05 / 05 ]",
         "cta_label": "",
         "cta_link": "",
+        "background_image": "shopify://shop_images/ChatGPT_Image_May_19_2026_11_48_54_PM.png",
         "background_video": "",
         "img_pos_x": 50,
         "img_pos_y": 50,
@@ -52,6 +53,7 @@
           "type": "menu_item",
           "settings": {
             "item_label": "Appetizers",
+            "item_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_06_14_20_PM.png",
             "item_link": ""
           }
         },
@@ -59,6 +61,7 @@
           "type": "menu_item",
           "settings": {
             "item_label": "Cocktails",
+            "item_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_06_17_46_PM.png",
             "item_link": ""
           }
         },
@@ -66,6 +69,7 @@
           "type": "menu_item",
           "settings": {
             "item_label": "Entrees",
+            "item_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_06_26_35_PM.png",
             "item_link": ""
           }
         },
@@ -73,6 +77,7 @@
           "type": "menu_item",
           "settings": {
             "item_label": "Palate Cleansers",
+            "item_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_06_37_41_PM.png",
             "item_link": ""
           }
         },
@@ -80,6 +85,7 @@
           "type": "menu_item",
           "settings": {
             "item_label": "Desserts",
+            "item_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_06_28_54_PM.png",
             "item_link": ""
           }
         }
@@ -123,10 +129,11 @@
         "item_font_weight": 700,
         "item_letter_spacing": 8,
         "item_padding_v": 9,
-        "patch_top": 5,
-        "patch_height": 36,
-        "patch_max_width": 400,
+        "patch_top": 2,
+        "patch_height": 27,
+        "patch_max_width": 100,
         "patch_padding_h": 6,
+        "patch_image": "shopify://shop_images/Untitled_design.png",
         "patch_colour": "#811313",
         "headline_colour": "#111111",
         "subtitle_colour": "#1a1a1a",
