@@ -11,9 +11,9 @@
 
   /* ── Drawer panel ── */
   .cart-drawer__dialog {
-    background-color: #f1f1f1 !important;
+    background-color: #f6f3f3 !important;
     color: #111 !important;
-    max-width: 450px !important;
+    max-width: 434px !important;
     width: 100% !important;
   }
 
@@ -37,17 +37,17 @@
   ═══════════════════════════════ */
 
   .ensne-cart-drawer__header {
-    background: #f1f1f1 !important;
-    padding: 18px 20px 0 !important;
+    background: #f6f3f3 !important;
+    padding: 20px 14px 0 !important;
     flex-shrink: 0 !important;
   }
 
   /* Row 1: title + close button */
   .ensne-cart-drawer__top-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    padding-bottom: 14px;
+    padding-bottom: 2px;
   }
 
   /* "YOUR BAG" heading */
@@ -85,17 +85,17 @@
   }
 
   .cart-drawer__close-button .svg-wrapper svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 24px !important;
+    height: 24px !important;
     stroke: #111 !important;
     fill: none !important;
-    stroke-width: 1.5 !important;
+    stroke-width: 1.25 !important;
   }
 
   /* Divider line */
   .ensne-cart-drawer__divider {
     height: 1px;
-    background: #d8d8d8;
+    background: #a5a1a1;
     width: 100%;
   }
 
@@ -103,15 +103,15 @@
   .ensne-cart-drawer__bottom-row {
     display: flex;
     justify-content: flex-end;
-    padding: 6px 0 10px;
+    padding: 1px 0 10px;
   }
 
   .ensne-cart-drawer__serving-tag {
     font-family: 'Archivo Narrow', sans-serif;
     font-size: 11px;
     font-weight: 400;
-    color: #999;
-    letter-spacing: 0.1em;
+    color: #6b001f;
+    letter-spacing: 0.08em;
     text-transform: lowercase;
   }
 
@@ -151,7 +151,7 @@
 
   /* Items area background */
   .cart-drawer__dialog .cart-items__wrapper {
-    background: #f1f1f1 !important;
+    background: #f6f3f3 !important;
   }
 
   /* ═══════════════════════════════
@@ -169,8 +169,8 @@
     grid-template-rows: auto auto !important;
     column-gap: 14px !important;
     row-gap: 0 !important;
-    padding: 14px 20px !important;
-    border-bottom: 1px solid #e0e0e0 !important;
+    padding: 18px 14px 20px !important;
+    border-bottom: 1px solid #bdb8b8 !important;
     align-items: start !important;
     background: transparent !important;
   }
@@ -236,7 +236,7 @@
     font-family: 'Archivo Narrow', sans-serif !important;
     font-size: 11px !important;
     font-weight: 400 !important;
-    color: #999 !important;
+    color: #8d8a8a !important;
     letter-spacing: 0.08em !important;
     margin: 0 !important;
     text-transform: lowercase !important;
@@ -310,7 +310,7 @@
   .cart-drawer .cart-items__quantity-controls {
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 8px !important;
     flex-wrap: nowrap !important;
   }
 
@@ -333,7 +333,7 @@
     background: #6b001f !important;
     border-radius: 100px !important;
     height: 22px !important;
-    min-width: 78px !important;
+    min-width: 80px !important;
     padding: 0 2px !important;
     gap: 0 !important;
     border: none !important;
@@ -429,17 +429,17 @@
 
   .cart-drawer__summary {
     background: #6b001f !important;
-    padding: 16px 20px 0 !important;
+    padding: 15px 20px 18px !important;
     flex-shrink: 0 !important;
   }
 
   /* Subtotal label */
   .cart-drawer__summary .cart-totals__total-label {
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
     color: #fff !important;
   }
 
@@ -447,7 +447,7 @@
   .cart-drawer__summary .cart-totals__total-value,
   .cart-drawer__summary text-component {
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 700 !important;
     color: #fff !important;
   }
@@ -481,12 +481,13 @@
 
   /* Cart note: "add order note" */
   .cart-drawer__summary .cart-actions {
-    border-color: rgba(255, 255, 255, 0.15) !important;
+    border: none !important;
     margin-block-start: 0 !important;
+    padding: 0 !important;
   }
 
   .cart-drawer__summary .cart-note__summary {
-    padding-block: 8px !important;
+    padding-block: 4px 0 !important;
   }
 
   .cart-drawer__summary .cart-note__label {
@@ -496,7 +497,8 @@
     color: rgba(255, 255, 255, 0.65) !important;
     text-decoration: underline !important;
     text-underline-offset: 2px !important;
-    letter-spacing: 0.06em !important;
+    letter-spacing: 0.04em !important;
+    text-transform: lowercase !important;
   }
 
   .cart-drawer__summary .cart-totals__icon svg {
@@ -533,11 +535,15 @@
   .cart-drawer__summary .cart-totals {
     border-block-start: none !important;
     padding-block-start: 0 !important;
-    gap: 8px !important;
+    gap: 2px !important;
   }
 
   .cart-drawer__summary .cart-totals__container {
-    gap: 4px !important;
+    gap: 2px !important;
+  }
+
+  .cart-drawer__summary .cart-totals__total {
+    align-items: center !important;
   }
 
   /* ═══════════════════════════════
@@ -545,7 +551,7 @@
   ═══════════════════════════════ */
 
   .cart-drawer__summary .cart__ctas {
-    padding: 14px 0 20px !important;
+    padding: 18px 4px 0 !important;
     display: flex !important;
     flex-direction: row !important;
     gap: 10px !important;
@@ -560,11 +566,11 @@
     font-family: 'Archivo Narrow', sans-serif !important;
     font-size: 11px !important;
     font-weight: 700 !important;
-    letter-spacing: 0.2em !important;
+    letter-spacing: 0 !important;
     text-transform: uppercase !important;
     border: none !important;
-    border-radius: 4px !important;
-    padding: 12px 10px !important;
+    border-radius: 10px !important;
+    padding: 9px 10px !important;
     cursor: pointer !important;
     transition: background 0.2s, color 0.2s !important;
     white-space: nowrap !important;
@@ -589,11 +595,11 @@
   .cart-drawer__summary .additional-checkout-buttons > div,
   .cart-drawer__summary .additional-checkout-buttons iframe,
   .cart-drawer__summary .additional-checkout-buttons button {
-    border-radius: 4px !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
     width: 100% !important;
     height: 100% !important;
-    min-height: 40px !important;
+    min-height: 38px !important;
   }
 
   /* ═══════════════════════════════
