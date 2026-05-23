@@ -1,0 +1,609 @@
+{% comment %}
+  ENSNE — Two-Column Product Grid Section
+  File: sections/ensne-product-grid.liquid
+
+  Design (matching reference):
+  • White/light page background with thin outer padding
+  • Two equal columns side by side
+  • Each card: tall editorial image, product name + price bottom-left
+  • Hover effect: zoom-in, zoom-out, pan, or reveal (selectable per section)
+  • Product picker OR manual image + name + price + link
+  • Configurable: number of columns (2–4), gap, image height, hover style
+  • All colours editable in theme editor
+
+  FONT SYSTEM (sourced from ENSNE_font_reference.md + base.css):
+  ┌──────────────────────────────┬────────────────────────────────┬────────────┬──────────────┐
+  │ Element                      │ Font                           │ Weight     │ Tracking     │
+  ├──────────────────────────────┼────────────────────────────────┼────────────┼──────────────┤
+  │ Product name on image        │ Atkinson Hyperlegible          │ 700 normal │ 0em          │
+  │ Product price                │ Archivo Narrow                 │ 400 normal │ 0em          │
+  │ Quick-shop badge             │ Archivo Narrow                 │ 400 normal │ 0.22em       │
+  └──────────────────────────────┴────────────────────────────────┴────────────┴──────────────┘
+
+  Notes:
+  - Product name on image = AtkinsonHyperlegible-Bold (PAGE 03–05 reference)
+  - Price = ArchivoNarrow-Regular, 0em tracking (Prices row in font ref)
+  - Badge label mimics category label style → Archivo Narrow, uppercase, 0.22em
+{% endcomment %}
+
+
+<style>
+  #epg-{{ section.id }},
+  #epg-{{ section.id }} *,
+  #epg-{{ section.id }} *::before,
+  #epg-{{ section.id }} *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ══ SECTION ══ */
+  #epg-{{ section.id }} {
+    width: 100%;
+    background: {{ section.settings.bg_colour }};
+    padding: clamp(16px, 2.5vw, 40px);
+    /* Base font for section: body default per ENSNE system */
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+  }
+
+  /* ══ GRID ══ */
+  #epg-{{ section.id }} .epg-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+    gap: {{ section.settings.card_gap }}px;
+  }
+
+  /* ══ CARD ══ */
+  #epg-{{ section.id }} .epg-card {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: {{ section.settings.card_radius }}px;
+  }
+
+  /* ── Image wrapper ── */
+  #epg-{{ section.id }} .epg-img-wrap {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.card_height }}vh;
+    overflow: hidden;
+  }
+
+  #epg-{{ section.id }} .epg-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    transition:
+      transform {{ section.settings.hover_duration }}ms {{ section.settings.hover_easing }},
+      filter {{ section.settings.hover_duration }}ms ease;
+    will-change: transform, filter;
+  }
+
+  /* ── Bottom gradient for text readability ── */
+  #epg-{{ section.id }} .epg-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,{{ section.settings.gradient_strength | divided_by: 100.0 }}) 0%,
+      rgba(0,0,0,0.12) 35%,
+      transparent 65%
+    );
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  /* ── Product info overlay ──
+     Product name on image:
+     Font ref: AtkinsonHyperlegible-Bold | 700 normal | 25pt → clamp(14px,1.4vw,20px) | 0em
+     Matches .ensne-product-name-on-image / .product-card__name-overlay in base.css */
+  #epg-{{ section.id }} .epg-info {
+    position: absolute;
+    bottom: clamp(14px, 2.5vh, 28px);
+    left: clamp(14px, 2vw, 28px);
+    z-index: 2;
+  }
+
+  #epg-{{ section.id }} .epg-name {
+    display: block;
+    font-family: var(--font-menu, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: 700;
+    font-style: normal;
+    font-size: clamp(14px, 1.4vw, 20px);
+    letter-spacing: var(--tracking-0, 0em); /* PSD: 0 → 0em */
+    line-height: 1.25;
+    color: {{ section.settings.product_name_colour }};
+    transition: color 0.3s ease;
+  }
+
+  /* Product price:
+     Font ref: ArchivoNarrow-Regular | 400 normal | 21.4pt → clamp(12px,1.2vw,18px) | 0em
+     Matches .price / .product-price in base.css */
+  #epg-{{ section.id }} .epg-price {
+    display: block;
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(12px, 1.2vw, 18px);
+    letter-spacing: var(--tracking-0, 0em); /* PSD: 0 → 0em */
+    color: {{ section.settings.product_price_colour }};
+    margin-top: 4px;
+  }
+
+  #epg-{{ section.id }} .epg-price s {
+    opacity: 0.55;
+    margin-right: 4px;
+  }
+
+  /* ── Quick-shop badge (top-right, appears on hover) ──
+     Style matches category label approach: Archivo Narrow, uppercase, 0.22em tracking
+     Font ref: nav/label adjacent — Archivo Narrow 400, prominent letter-spacing */
+  #epg-{{ section.id }} .epg-badge {
+    position: absolute;
+    top: clamp(10px, 1.5vh, 18px);
+    right: clamp(10px, 1.5vw, 18px);
+    z-index: 3;
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(8px, 0.75vw, 11px);
+    letter-spacing: var(--tracking-220, 0.22em); /* matches category label tracking */
+    text-transform: uppercase;
+    color: {{ section.settings.badge_text_colour }};
+    background: {{ section.settings.badge_bg_colour }};
+    padding: 0.35em 0.8em;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════════════════
+     HOVER EFFECTS
+     Each card has data-hover="style"
+  ══════════════════════════════════════ */
+
+  /* — ZOOM IN (default) — */
+  #epg-{{ section.id }} .epg-card[data-hover="zoom-in"]:hover .epg-img-wrap img {
+    transform: scale(1.1);
+  }
+
+  /* — ZOOM OUT — */
+  #epg-{{ section.id }} .epg-card[data-hover="zoom-out"] .epg-img-wrap img {
+    transform: scale(1.08);
+  }
+  #epg-{{ section.id }} .epg-card[data-hover="zoom-out"]:hover .epg-img-wrap img {
+    transform: scale(1);
+  }
+
+  /* — PAN UP — */
+  #epg-{{ section.id }} .epg-card[data-hover="pan-up"]:hover .epg-img-wrap img {
+    transform: scale(1.06) translateY(-4%);
+  }
+
+  /* — PAN DOWN — */
+  #epg-{{ section.id }} .epg-card[data-hover="pan-down"]:hover .epg-img-wrap img {
+    transform: scale(1.06) translateY(4%);
+  }
+
+  /* — DESATURATE then COLOUR — */
+  #epg-{{ section.id }} .epg-card[data-hover="desaturate"] .epg-img-wrap img {
+    filter: grayscale(0%);
+  }
+  #epg-{{ section.id }} .epg-card[data-hover="desaturate"]:hover .epg-img-wrap img {
+    filter: grayscale(0%) brightness(1.04) contrast(1.05);
+    transform: scale(1.04);
+  }
+
+  /* — WARM (sepia flash) — */
+  #epg-{{ section.id }} .epg-card[data-hover="warm"]:hover .epg-img-wrap img {
+    filter: sepia(0.3) brightness(1.05) contrast(1.06);
+    transform: scale(1.05);
+  }
+
+  /* — LIFT (shadow appears) — */
+  #epg-{{ section.id }} .epg-card[data-hover="lift"] {
+    transition: box-shadow 0.4s ease, transform 0.4s ease;
+  }
+  #epg-{{ section.id }} .epg-card[data-hover="lift"]:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.18);
+  }
+  #epg-{{ section.id }} .epg-card[data-hover="lift"]:hover .epg-img-wrap img {
+    transform: scale(1.04);
+  }
+
+  /* — REVEAL (gradient fades, brightness up) — */
+  #epg-{{ section.id }} .epg-card[data-hover="reveal"]:hover .epg-img-wrap::after {
+    opacity: 0.4;
+  }
+  #epg-{{ section.id }} .epg-card[data-hover="reveal"]:hover .epg-img-wrap img {
+    transform: scale(1.05);
+    filter: brightness(1.08);
+  }
+
+  /* Badge shows on ALL hover types */
+  #epg-{{ section.id }} .epg-card:hover .epg-badge {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ══ RESPONSIVE ══ */
+  @media (max-width: 900px) {
+    #epg-{{ section.id }} .epg-grid {
+      grid-template-columns: repeat(
+        {{ section.settings.columns_mobile }}, 1fr
+      );
+    }
+    #epg-{{ section.id }} .epg-img-wrap {
+      height: {{ section.settings.card_height_mobile }}vh;
+    }
+  }
+
+  @media (max-width: 520px) {
+    #epg-{{ section.id }} .epg-grid {
+      grid-template-columns: 1fr;
+    }
+    #epg-{{ section.id }} .epg-img-wrap {
+      height: 65vw;
+    }
+    #epg-{{ section.id }} {
+      padding: 10px;
+    }
+  }
+</style>
+
+<div id="epg-{{ section.id }}">
+  <div class="epg-grid">
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'product_card' -%}
+
+        {%- assign the_product = block.settings.product -%}
+        {%- assign hover_style = block.settings.hover_effect | default: section.settings.default_hover -%}
+
+        {%- comment -%} Resolve URL {%- endcomment -%}
+        {%- if the_product != blank -%}
+          {%- assign card_url = the_product.url -%}
+        {%- elsif block.settings.custom_link != blank -%}
+          {%- assign card_url = block.settings.custom_link -%}
+        {%- else -%}
+          {%- assign card_url = '#' -%}
+        {%- endif -%}
+
+        <a
+          class="epg-card"
+          href="{{ card_url }}"
+          data-hover="{{ hover_style }}"
+          {{ block.shopify_attributes }}
+        >
+          <!-- Image -->
+          <div class="epg-img-wrap">
+
+            {%- if block.settings.card_image != blank -%}
+              {%- assign ci = block.settings.card_image -%}
+              <img
+                src="{{ ci | image_url: width: 1200 }}"
+                srcset="{{ ci | image_url: width: 600 }} 600w, {{ ci | image_url: width: 1000 }} 1000w, {{ ci | image_url: width: 1600 }} 1600w"
+                sizes="(max-width:900px) {{ 100 | divided_by: section.settings.columns_mobile }}vw, {{ 100 | divided_by: section.settings.columns }}vw"
+                alt="{{ ci.alt | default: block.settings.custom_name | escape }}"
+                loading="lazy"
+              >
+            {%- elsif the_product != blank and the_product.featured_image != blank -%}
+              {%- assign pi = the_product.featured_image -%}
+              <img
+                src="{{ pi | image_url: width: 1200 }}"
+                srcset="{{ pi | image_url: width: 600 }} 600w, {{ pi | image_url: width: 1000 }} 1000w, {{ pi | image_url: width: 1600 }} 1600w"
+                sizes="(max-width:900px) {{ 100 | divided_by: section.settings.columns_mobile }}vw, {{ 100 | divided_by: section.settings.columns }}vw"
+                alt="{{ pi.alt | default: the_product.title | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              <img
+                src="{{ 'product-1' | placeholder_svg_tag }}"
+                alt="Product"
+                style="width:100%;height:100%;object-fit:cover;"
+              >
+            {%- endif -%}
+
+            <!-- Product info -->
+            <div class="epg-info">
+              {%- if the_product != blank -%}
+                <span class="epg-name">{{ the_product.title }}</span>
+                <span class="epg-price">
+                  {%- if the_product.compare_at_price > the_product.price -%}
+                    <s>{{ the_product.compare_at_price | money }}</s>
+                  {%- endif -%}
+                  {{ the_product.price | money }}
+                </span>
+              {%- elsif block.settings.custom_name != blank -%}
+                <span class="epg-name">{{ block.settings.custom_name }}</span>
+                {%- if block.settings.custom_price != blank -%}
+                  <span class="epg-price">{{ block.settings.custom_price }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+
+            <!-- Quick-shop badge -->
+            {%- if section.settings.show_badge -%}
+              <span class="epg-badge">{{ section.settings.badge_label }}</span>
+            {%- endif -%}
+
+          </div>
+        </a>
+
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "ENSNE Product Grid",
+  "tag": "section",
+  "class": "section-ensne-product-grid",
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "header",
+          "content": "── Product ──"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Pulls title, price, image, and URL automatically."
+        },
+        {
+          "type": "header",
+          "content": "── Manual override ──"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card image",
+          "info": "Overrides the product image when set."
+        },
+        {
+          "type": "text",
+          "id": "custom_name",
+          "label": "Product name (manual)",
+          "default": "frame necklace"
+        },
+        {
+          "type": "text",
+          "id": "custom_price",
+          "label": "Price (manual)",
+          "default": "₹1,700"
+        },
+        {
+          "type": "url",
+          "id": "custom_link",
+          "label": "Link (manual)"
+        },
+        {
+          "type": "header",
+          "content": "── Hover Effect ──"
+        },
+        {
+          "type": "select",
+          "id": "hover_effect",
+          "label": "Hover effect (overrides section default)",
+          "options": [
+            { "value": "zoom-in",    "label": "Zoom in" },
+            { "value": "zoom-out",   "label": "Zoom out" },
+            { "value": "pan-up",     "label": "Pan up" },
+            { "value": "pan-down",   "label": "Pan down" },
+            { "value": "warm",       "label": "Warm colour wash" },
+            { "value": "desaturate", "label": "Brightness + contrast pop" },
+            { "value": "lift",       "label": "Lift (card rises)" },
+            { "value": "reveal",     "label": "Reveal (gradient fades)" }
+          ],
+          "default": "zoom-in"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "── Grid Layout ──"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (tablet)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Card image height (desktop)",
+      "min": 30,
+      "max": 90,
+      "step": 5,
+      "default": 65,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "label": "Card image height (mobile)",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "default": 50,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "── Default Hover Effect ──"
+    },
+    {
+      "type": "select",
+      "id": "default_hover",
+      "label": "Default hover style (cards inherit this unless overridden)",
+      "options": [
+        { "value": "zoom-in",    "label": "Zoom in" },
+        { "value": "zoom-out",   "label": "Zoom out" },
+        { "value": "pan-up",     "label": "Pan up" },
+        { "value": "pan-down",   "label": "Pan down" },
+        { "value": "warm",       "label": "Warm colour wash" },
+        { "value": "desaturate", "label": "Brightness + contrast pop" },
+        { "value": "lift",       "label": "Lift (card rises)" },
+        { "value": "reveal",     "label": "Reveal (gradient fades)" }
+      ],
+      "default": "zoom-in"
+    },
+    {
+      "type": "range",
+      "id": "hover_duration",
+      "label": "Hover transition speed",
+      "min": 200,
+      "max": 900,
+      "step": 50,
+      "default": 500,
+      "unit": "ms"
+    },
+    {
+      "type": "select",
+      "id": "hover_easing",
+      "label": "Hover easing",
+      "options": [
+        { "value": "ease",        "label": "Ease" },
+        { "value": "ease-in-out", "label": "Ease in-out" },
+        { "value": "ease-out",    "label": "Ease out" },
+        { "value": "cubic-bezier(0.25,0.46,0.45,0.94)", "label": "Smooth decelerate" }
+      ],
+      "default": "ease-out"
+    },
+    {
+      "type": "header",
+      "content": "── Badge ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show quick-shop badge on hover",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_label",
+      "label": "Badge label",
+      "default": "Quick shop"
+    },
+    {
+      "type": "header",
+      "content": "── Colours ──"
+    },
+    {
+      "type": "color",
+      "id": "bg_colour",
+      "label": "Section background",
+      "default": "#f0ece4"
+    },
+    {
+      "type": "range",
+      "id": "gradient_strength",
+      "label": "Bottom gradient opacity",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "default": 60,
+      "unit": "%"
+    },
+    {
+      "type": "color",
+      "id": "product_name_colour",
+      "label": "Product name colour",
+      "default": "#ededed"
+    },
+    {
+      "type": "color",
+      "id": "product_price_colour",
+      "label": "Product price colour",
+      "default": "#ededed"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_colour",
+      "label": "Badge text colour",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_colour",
+      "label": "Badge background colour",
+      "default": "#ededed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ENSNE Product Grid",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "frame necklace",
+            "custom_price": "₹1,700",
+            "hover_effect": "zoom-in"
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "custom_name": "three magical words",
+            "custom_price": "₹15,000",
+            "hover_effect": "pan-up"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

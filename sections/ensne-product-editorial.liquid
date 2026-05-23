@@ -1,0 +1,555 @@
+{% comment %}
+  ENSNE — Editorial Product Section
+  File: sections/ensne-product-editorial.liquid
+
+  Design (matching reference):
+  • Category label top-left (italic/mixed weight like "APP ET IZ ER S")
+  • Full-bleed editorial background image (wide, cinematic crop)
+  • Optional parallax scroll effect on the image
+  • Product name + price overlaid bottom-left on the image
+  • Shopify product picker — pulls title, price, image from real products
+  • Multiple blocks = multiple "courses" / product editorials stacked
+  • All colours, typography, spacing editable in theme editor
+
+  FONT SYSTEM (sourced from ENSNE_font_reference.md + base.css):
+  ┌─────────────────────────────┬────────────────────────────────┬────────────┬──────────────┐
+  │ Element                     │ Font                           │ Weight     │ Tracking     │
+  ├─────────────────────────────┼────────────────────────────────┼────────────┼──────────────┤
+  │ Category label              │ Archivo Narrow, italic         │ 400 / 700  │ 0.22em       │
+  │ Product name on image       │ Atkinson Hyperlegible          │ 700 normal │ 0em          │
+  │ Product price               │ Archivo Narrow                 │ 400 normal │ 0em          │
+  │ Shop CTA pill               │ Archivo Narrow                 │ 400 normal │ 0.22em       │
+  └─────────────────────────────┴────────────────────────────────┴────────────┴──────────────┘
+{% endcomment %}
+
+
+<style>
+  #ep-{{ section.id }},
+  #ep-{{ section.id }} *,
+  #ep-{{ section.id }} *::before,
+  #ep-{{ section.id }} *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ══ SECTION WRAPPER ══ */
+  #ep-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    background: {{ section.settings.bg_colour }};
+    /* Base font: body copy default per ENSNE system */
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+  }
+
+  /* ══ EACH EDITORIAL BLOCK ══ */
+  #ep-{{ section.id }} .ep-block {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* ── Category label row (above image) ──
+     Font ref: ArchivoNarrow-Italic + ArchivoNarrowItalic-BoldItalic
+     Size: 10.5pt / ~0.875rem | Tracking: 220 → 0.22em | Colour: #811313
+     Matches .ensne-category-label in base.css */
+  #ep-{{ section.id }} .ep-category-row {
+    padding: clamp(14px, 2vh, 24px) clamp(20px, 3.5vw, 52px);
+    background: {{ section.settings.label_bg_colour }};
+  }
+
+  #ep-{{ section.id }} .ep-category-label {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(12px, 1.2vw, 18px);
+    letter-spacing: var(--tracking-220, 0.22em); /* PSD: 220 ÷ 1000 = 0.22em */
+    color: {{ section.settings.label_colour }};
+    text-transform: uppercase;
+  }
+
+  /* Bold letters within the category label (e.g. "ET" in APP-ET-IZ-ER-S)
+     Uses ArchivoNarrowItalic-BoldItalic — weight 700, still italic */
+  #ep-{{ section.id }} .ep-category-label strong {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: var(--tracking-220, 0.22em);
+    color: {{ section.settings.label_accent_colour }};
+  }
+
+  /* ── Image container with parallax ── */
+  #ep-{{ section.id }} .ep-image-wrap {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.img_height }}vh;
+    overflow: hidden;
+  }
+
+  #ep-{{ section.id }} .ep-image-wrap img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Taller than container — parallax shifts it */
+    height: 130%;
+    object-fit: cover;
+    object-position: center center;
+    will-change: transform;
+    display: block;
+  }
+
+  /* When parallax is OFF, normal cover */
+  #ep-{{ section.id }} .ep-image-wrap.no-parallax img {
+    height: 100%;
+    position: relative;
+    top: auto;
+  }
+
+  /* Gradient overlay so product text is readable */
+  #ep-{{ section.id }} .ep-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.58) 0%,
+      rgba(0,0,0,0.18) 30%,
+      transparent 60%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Product info — bottom-left over image ──
+     Matches PAGE 03–05 in font reference:
+     Product name on image = Atkinson Hyperlegible Bold 700, 25pt, 0em tracking, #ededed */
+  #ep-{{ section.id }} .ep-product-info {
+    position: absolute;
+    bottom: clamp(18px, 3vh, 36px);
+    left: clamp(20px, 3.5vw, 52px);
+    z-index: 2;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Product name on image:
+     Font ref: AtkinsonHyperlegible-Bold | 700 normal | 25pt → clamp(16px,1.6vw,22px) | 0em */
+  #ep-{{ section.id }} .ep-product-name {
+    font-family: var(--font-menu, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: 700;
+    font-style: normal;
+    font-size: clamp(16px, 1.6vw, 22px);
+    letter-spacing: var(--tracking-0, 0em); /* PSD: 0 → 0em */
+    line-height: 1.25;
+    color: {{ section.settings.product_name_colour }};
+    display: block;
+  }
+
+  /* Price on image:
+     Font ref: ArchivoNarrow-Regular | 400 normal | 21.4pt → clamp(14px,1.4vw,20px) | 0em */
+  #ep-{{ section.id }} .ep-product-price {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(14px, 1.4vw, 20px);
+    letter-spacing: var(--tracking-0, 0em); /* PSD: 0 → 0em */
+    color: {{ section.settings.product_price_colour }};
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ── Optional "Shop" CTA pill ──
+     Font ref: Nav-style Archivo Narrow 400, uppercase | 0.22em tracking (label style) */
+  #ep-{{ section.id }} .ep-shop-cta {
+    position: absolute;
+    bottom: clamp(18px, 3vh, 36px);
+    right: clamp(20px, 3.5vw, 52px);
+    z-index: 2;
+    display: none;
+    padding: 0.5em 1.5em;
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(9px, 0.85vw, 12px);
+    letter-spacing: var(--tracking-220, 0.22em); /* matches category label tracking */
+    text-transform: uppercase;
+    text-decoration: none;
+    color: {{ section.settings.cta_text_colour }};
+    border: 1px solid {{ section.settings.cta_border_colour }};
+    background: transparent;
+    transition: background 0.25s, color 0.25s;
+    white-space: nowrap;
+  }
+
+  #ep-{{ section.id }} .ep-shop-cta:hover {
+    background: {{ section.settings.cta_border_colour }};
+    color: #000;
+  }
+
+  /* ── Divider between blocks ── */
+  #ep-{{ section.id }} .ep-block + .ep-block {
+    margin-top: {{ section.settings.block_gap }}px;
+  }
+
+  /* ══ RESPONSIVE ══ */
+  @media (max-width: 768px) {
+    #ep-{{ section.id }} .ep-image-wrap {
+      height: {{ section.settings.img_height_mobile }}vh;
+    }
+    #ep-{{ section.id }} .ep-image-wrap img {
+      height: 140%;
+    }
+  }
+</style>
+
+<div id="ep-{{ section.id }}">
+
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'editorial' -%}
+
+      {%- assign the_product = block.settings.product -%}
+
+      <div
+        class="ep-block"
+        data-parallax="{{ section.settings.enable_parallax }}"
+        {{ block.shopify_attributes }}
+      >
+
+        <!-- Category label -->
+        {%- if block.settings.category_label != blank -%}
+          <div class="ep-category-row">
+            <span class="ep-category-label">{{ block.settings.category_label }}</span>
+          </div>
+        {%- endif -%}
+
+        <!-- Image + product overlay -->
+        <div class="ep-image-wrap{% unless section.settings.enable_parallax %} no-parallax{% endunless %}">
+
+          {%- comment -%} Priority: block custom image → product featured image → placeholder {%- endcomment -%}
+          {%- if block.settings.editorial_image != blank -%}
+            {%- assign bg_img = block.settings.editorial_image -%}
+            <img
+              src="{{ bg_img | image_url: width: 2400 }}"
+              srcset="{{ bg_img | image_url: width: 900 }} 900w, {{ bg_img | image_url: width: 1600 }} 1600w, {{ bg_img | image_url: width: 2400 }} 2400w"
+              sizes="100vw"
+              alt="{{ bg_img.alt | default: block.settings.category_label | escape }}"
+              loading="lazy"
+              data-parallax-img
+            >
+          {%- elsif the_product != blank and the_product.featured_image != blank -%}
+            {%- assign bg_img = the_product.featured_image -%}
+            <img
+              src="{{ bg_img | image_url: width: 2400 }}"
+              srcset="{{ bg_img | image_url: width: 900 }} 900w, {{ bg_img | image_url: width: 1600 }} 1600w, {{ bg_img | image_url: width: 2400 }} 2400w"
+              sizes="100vw"
+              alt="{{ bg_img.alt | default: the_product.title | escape }}"
+              loading="lazy"
+              data-parallax-img
+            >
+          {%- else -%}
+            <img
+              src="{{ 'lifestyle-1' | placeholder_svg_tag }}"
+              alt=""
+              data-parallax-img
+              style="object-fit:cover;width:100%;height:100%;"
+            >
+          {%- endif -%}
+
+          <!-- Product info overlay -->
+          {%- if the_product != blank -%}
+            <a class="ep-product-info" href="{{ the_product.url }}">
+              <span class="ep-product-name">{{ the_product.title }}</span>
+              <span class="ep-product-price">
+                {%- if the_product.compare_at_price > the_product.price -%}
+                  <s style="opacity:0.6;">{{ the_product.compare_at_price | money }}</s>&nbsp;
+                {%- endif -%}
+                {{ the_product.price | money }}
+              </span>
+            </a>
+            {%- if section.settings.show_cta -%}
+              <a class="ep-shop-cta" href="{{ the_product.url }}">
+                {{ section.settings.cta_label }}
+              </a>
+            {%- endif -%}
+          {%- elsif block.settings.custom_product_name != blank -%}
+            {%- assign custom_link = block.settings.custom_product_link | default: '#' -%}
+            <a class="ep-product-info" href="{{ custom_link }}">
+              <span class="ep-product-name">{{ block.settings.custom_product_name }}</span>
+              {%- if block.settings.custom_product_price != blank -%}
+                <span class="ep-product-price">{{ block.settings.custom_product_price }}</span>
+              {%- endif -%}
+            </a>
+            {%- if section.settings.show_cta -%}
+              <a class="ep-shop-cta" href="{{ custom_link }}">{{ section.settings.cta_label }}</a>
+            {%- endif -%}
+          {%- endif -%}
+
+        </div>
+      </div>
+
+    {%- endif -%}
+  {%- endfor -%}
+
+</div>
+
+<!-- Parallax engine — vanilla JS, no dependencies -->
+<script>
+(function () {
+  function initParallax() {
+    var section = document.getElementById('ep-{{ section.id }}');
+    if (!section) return;
+
+    var blocks = Array.from(section.querySelectorAll('.ep-block[data-parallax="true"]'));
+    if (!blocks.length) return;
+
+    /* Collect each block's img element */
+    var items = blocks.map(function (block) {
+      return {
+        wrap: block.querySelector('.ep-image-wrap'),
+        img:  block.querySelector('[data-parallax-img]')
+      };
+    }).filter(function (item) { return item.img; });
+
+    if (!items.length) return;
+
+    var ticking = false;
+
+    function update() {
+      items.forEach(function (item) {
+        var rect   = item.wrap.getBoundingClientRect();
+        var vh     = window.innerHeight;
+
+        /* Only update when the block is near the viewport */
+        if (rect.bottom < -vh || rect.top > vh * 2) return;
+
+        /* progress: 0 when bottom of wrap hits bottom of screen,
+                     1 when top of wrap hits top of screen */
+        var progress = 1 - (rect.top + rect.height) / (vh + rect.height);
+        progress = Math.max(0, Math.min(1, progress));
+
+        /* Shift image -15% to +15% vertically */
+        var shift = (progress - 0.5) * -30; /* px as % of image height */
+        item.img.style.transform = 'translateY(' + shift + '%)';
+      });
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update(); /* run once on load */
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initParallax);
+  } else {
+    initParallax();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ENSNE Editorial Product",
+  "tag": "section",
+  "class": "section-ensne-editorial",
+  "blocks": [
+    {
+      "type": "editorial",
+      "name": "Editorial Block",
+      "settings": [
+        {
+          "type": "header",
+          "content": "── Category Label ──"
+        },
+        {
+          "type": "text",
+          "id": "category_label",
+          "label": "Category label",
+          "default": "<em>APP</em><strong>ET</strong><em>IZ</em><strong>ER</strong><em>S</em>",
+          "info": "Wrap letters in <strong> for Bold Italic accent (e.g. ET, ER). Leave others plain for regular Italic."
+        },
+        {
+          "type": "header",
+          "content": "── Background Image ──"
+        },
+        {
+          "type": "image_picker",
+          "id": "editorial_image",
+          "label": "Editorial / background image",
+          "info": "Full-bleed cinematic photo. If blank and a product is selected, uses the product image."
+        },
+        {
+          "type": "header",
+          "content": "── Product ──"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Pulls title, price, and URL automatically. Image used as fallback if no editorial image set."
+        },
+        {
+          "type": "header",
+          "content": "── Manual override (if no product selected) ──"
+        },
+        {
+          "type": "text",
+          "id": "custom_product_name",
+          "label": "Product name (manual)",
+          "default": "frame necklace"
+        },
+        {
+          "type": "text",
+          "id": "custom_product_price",
+          "label": "Price (manual)",
+          "default": "₹1,700"
+        },
+        {
+          "type": "url",
+          "id": "custom_product_link",
+          "label": "Product link (manual)"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "── Parallax ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable parallax scroll effect",
+      "default": true,
+      "info": "Image drifts as you scroll for a cinematic feel."
+    },
+    {
+      "type": "header",
+      "content": "── Layout ──"
+    },
+    {
+      "type": "range",
+      "id": "img_height",
+      "label": "Image height (desktop)",
+      "min": 40,
+      "max": 95,
+      "step": 5,
+      "default": 70,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "img_height_mobile",
+      "label": "Image height (mobile)",
+      "min": 40,
+      "max": 90,
+      "step": 5,
+      "default": 55,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "block_gap",
+      "label": "Gap between blocks",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "── CTA Button ──"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show shop button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop now"
+    },
+    {
+      "type": "header",
+      "content": "── Colours ──"
+    },
+    {
+      "type": "color",
+      "id": "bg_colour",
+      "label": "Section background",
+      "default": "#f5f2ee"
+    },
+    {
+      "type": "color",
+      "id": "label_bg_colour",
+      "label": "Category label background",
+      "default": "#f5f2ee"
+    },
+    {
+      "type": "color",
+      "id": "label_colour",
+      "label": "Category label colour",
+      "default": "#811313"
+    },
+    {
+      "type": "color",
+      "id": "label_accent_colour",
+      "label": "Category label bold accent colour",
+      "default": "#811313",
+      "info": "Colour of <strong> (Bold Italic) letters in the label."
+    },
+    {
+      "type": "color",
+      "id": "product_name_colour",
+      "label": "Product name colour",
+      "default": "#ededed"
+    },
+    {
+      "type": "color",
+      "id": "product_price_colour",
+      "label": "Product price colour",
+      "default": "#ededed"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_colour",
+      "label": "CTA text colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cta_border_colour",
+      "label": "CTA border colour",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "ENSNE Editorial Product",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "editorial",
+          "settings": {
+            "category_label": "APPETIZERS",
+            "custom_product_name": "frame necklace",
+            "custom_product_price": "₹1,700"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

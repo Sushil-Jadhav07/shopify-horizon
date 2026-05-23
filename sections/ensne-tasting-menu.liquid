@@ -1,0 +1,577 @@
+{% comment %}
+  ENSNE - The Tasting Menu Section
+  File: sections/ensne-tasting-menu.liquid
+  Nav removed - handled by global theme header.
+  Subtitle sits beside "MENU" in a flex row, top-aligned to MENU.
+  All font sizes in px - no clamp(), no vw/vh on text.
+{% endcomment %}
+
+<style>
+  #tm-{{ section.id }},
+  #tm-{{ section.id }} *,
+  #tm-{{ section.id }} *::before,
+  #tm-{{ section.id }} *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ══ SECTION ══ */
+  #tm-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: {{ section.settings.bg_colour }};
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-style: normal;
+    overflow: clip;
+  }
+
+  /* ── Canvas / linen texture overlay ── */
+  #tm-{{ section.id }} .tm-texture {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    {%- if section.settings.bg_texture != blank -%}
+      background-image: url('{{ section.settings.bg_texture | image_url: width: 2000 }}');
+      background-size: cover;
+      background-position: center;
+    {%- else -%}
+      background-image:
+        repeating-linear-gradient(0deg,  transparent, transparent 2px, rgba(0,0,0,0.028) 2px, rgba(0,0,0,0.028) 3px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,0.028) 2px, rgba(0,0,0,0.028) 3px);
+    {%- endif -%}
+    opacity: {{ section.settings.bg_opacity | divided_by: 100.0 }};
+  }
+
+  /* ══ TWO-COLUMN GRID ══ */
+  #tm-{{ section.id }} .tm-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: {{ section.settings.left_col_width }}% {{ section.settings.left_col_width | minus: 100 | abs }}%;
+    min-height: 100vh;
+  }
+
+  /* ══ LEFT COLUMN ══ */
+  #tm-{{ section.id }} .tm-left {
+    padding-top:    {{ section.settings.section_padding_top }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    padding-left:   {{ section.settings.section_padding_left }}px;
+    padding-right:  {{ section.settings.section_padding_right }}px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ══ HEADLINE BLOCK ══
+     Contains: THE (small) / TASTING (big) / MENU + subtitle (flex row)
+     margin-bottom pushes down to menu list
+  ══ */
+  #tm-{{ section.id }} .tm-top-block {
+    margin-bottom: {{ section.settings.headline_to_menu_gap }}px;
+  }
+
+  /* ── "THE" small pre-line ──
+     Sits at the very top, same left edge as TASTING.
+     Small size, moderate tracking, tight line-height.
+  ── */
+  #tm-{{ section.id }} .tm-pre {
+    display: block;
+    font-family: var(--font-display, 'Archivo Black', sans-serif);
+    font-weight: {{ section.settings.pre_font_weight }};
+    font-size: {{ section.settings.pre_font_size }}px;
+    line-height: 1;
+    color: {{ section.settings.headline_colour }};
+    letter-spacing: {{ section.settings.pre_letter_spacing | divided_by: 100.0 }}em;
+    margin-bottom: {{ section.settings.pre_bottom_gap }}px;
+    text-transform: uppercase;
+  }
+
+  /* ── "TASTING" — full-width giant line ── */
+  #tm-{{ section.id }} .tm-big {
+    display: block;
+    font-family: var(--font-display, 'Archivo Black', sans-serif);
+    font-weight: {{ section.settings.headline_font_weight }};
+    font-size: {{ section.settings.headline_font_size }}px;
+    line-height: {{ section.settings.headline_line_height | divided_by: 100.0 }};
+    color: {{ section.settings.headline_colour }};
+    letter-spacing: {{ section.settings.headline_letter_spacing | divided_by: 100.0 }}em;
+    text-transform: uppercase;
+  }
+
+  /* ── MENU ROW: "MENU" + subtitle side by side ──
+     Design: subtitle sits to the RIGHT of MENU, top-aligned (flex-start).
+     The subtitle top aligns with the top of the MENU text cap-height.
+  ── */
+  #tm-{{ section.id }} .tm-menu-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: {{ section.settings.menu_subtitle_gap }}px;
+  }
+
+  /* ── Subtitle block — beside MENU ──
+     Fixed width box. Top-aligned with MENU line.
+     Small narrow font, justified text.
+     Has its own top padding to push it down from the MENU cap-height
+     to the visual baseline area shown in the design (~top of x-height).
+  ── */
+  #tm-{{ section.id }} .tm-subtitle-wrap {
+    padding-top: {{ section.settings.subtitle_top_offset }}px;
+    width: {{ section.settings.subtitle_width }}px;
+    flex-shrink: 0;
+  }
+
+  #tm-{{ section.id }} .tm-subtitle {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: {{ section.settings.subtitle_font_weight }};
+    font-style: normal;
+    font-size: {{ section.settings.subtitle_font_size }}px;
+    line-height: {{ section.settings.subtitle_line_height | divided_by: 100.0 }};
+    letter-spacing: {{ section.settings.subtitle_letter_spacing | divided_by: 100.0 }}em;
+    color: {{ section.settings.subtitle_colour }};
+    text-align: justify;
+  }
+
+  /* Bold italic accent inside subtitle */
+  #tm-{{ section.id }} .tm-subtitle strong,
+  #tm-{{ section.id }} .tm-subtitle b {
+    font-weight: {{ section.settings.subtitle_accent_weight }};
+    font-style: italic;
+    color: {{ section.settings.accent_colour }};
+  }
+
+  /* ══ MENU LIST ══ */
+  #tm-{{ section.id }} .tm-menu {
+    list-style: none;
+    width: 100%;
+  }
+
+  /* ── Each menu item row ── */
+  #tm-{{ section.id }} .tm-item {
+    display: flex;
+    align-items: center;
+    padding: {{ section.settings.item_padding_v }}px 0;
+    font-family: var(--font-menu, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: {{ section.settings.item_font_weight }};
+    font-style: normal;
+    font-size: {{ section.settings.item_font_size }}px;
+    line-height: 1;
+    letter-spacing: {{ section.settings.item_letter_spacing | divided_by: 100.0 }}em;
+    text-transform: uppercase;
+    color: {{ section.settings.menu_colour }};
+    cursor: pointer;
+    transition: color 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  /* ── Label wrapper: text sits above the patch pseudo-element ── */
+  #tm-{{ section.id }} .tm-item .tm-label {
+    display: inline-block;
+    position: relative;
+    /* No background here — patch is on ::before so text is always on top */
+    background: none !important;
+    line-height: inherit;
+  }
+
+  /* ── Patch pseudo-element — sits strictly BEHIND the text ──
+     top      = {{ section.settings.patch_top }}px  (from schema)
+     height   = {{ section.settings.patch_height }}px (from schema)
+     max-width = {{ section.settings.patch_max_width }}px (from schema)
+     left/right padding = patch_padding_h
+  ── */
+  #tm-{{ section.id }} .tm-item .tm-label::before {
+    content: '';
+    position: absolute;
+    top:    {{ section.settings.patch_top }}px;
+    left:   -{{ section.settings.patch_padding_h }}px;
+    height: {{ section.settings.patch_height }}px;
+    width:  calc(100% + {{ section.settings.patch_padding_h | times: 2 }}px);
+    max-width: {{ section.settings.patch_max_width }}px;
+    z-index: -1;
+    background-color: transparent;
+    background-image: none;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+  }
+
+  /* Active item */
+  #tm-{{ section.id }} .tm-item.is-active {
+    color: {{ section.settings.menu_active_colour }};
+  }
+  #tm-{{ section.id }} .tm-item.is-active .tm-label::before {
+    {%- if section.settings.patch_image != blank -%}
+      background-image: url('{{ section.settings.patch_image | image_url: width: 600 }}');
+      background-color: transparent;
+    {%- else -%}
+      background-image: none;
+      background-color: {{ section.settings.patch_colour }};
+    {%- endif -%}
+    opacity: 1;
+  }
+
+  /* Hover (inactive only) */
+  #tm-{{ section.id }} .tm-item:hover:not(.is-active) {
+    color: {{ section.settings.menu_active_colour }};
+  }
+  #tm-{{ section.id }} .tm-item:hover:not(.is-active) .tm-label::before {
+    {%- if section.settings.patch_image != blank -%}
+      background-image: url('{{ section.settings.patch_image | image_url: width: 600 }}');
+      background-color: transparent;
+    {%- else -%}
+      background-image: none;
+      background-color: {{ section.settings.patch_colour }}66;
+    {%- endif -%}
+    opacity: 0.55;
+  }
+
+  /* ══ RIGHT COLUMN - image panel ══ */
+  #tm-{{ section.id }} .tm-right {
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Image stack: anchored bottom-right, bleeds off right edge */
+  #tm-{{ section.id }} .tm-img-stack {
+    position: absolute;
+    bottom: 0;
+    right: {{ section.settings.img_bleed_right | times: -1 }}px;
+    width: {{ section.settings.img_width }}px;
+    height: {{ section.settings.img_height }}px;
+  }
+
+  #tm-{{ section.id }} .tm-img-frame {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+  #tm-{{ section.id }} .tm-img-frame.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #tm-{{ section.id }} .tm-img-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: right bottom;
+    display: block;
+  }
+  #tm-{{ section.id }} .tm-img-frame svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ══ MOBILE ══ */
+  @media (max-width: 768px) {
+    #tm-{{ section.id }} .tm-inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    #tm-{{ section.id }} .tm-left {
+      padding: 24px 20px 28px 20px;
+    }
+    #tm-{{ section.id }} .tm-pre {
+      font-size: {{ section.settings.pre_font_size | times: 0.65 | round }}px;
+    }
+    #tm-{{ section.id }} .tm-big {
+      font-size: {{ section.settings.headline_font_size | times: 0.5 | round }}px;
+    }
+    #tm-{{ section.id }} .tm-menu-row {
+      flex-direction: column;
+      gap: 10px;
+    }
+    #tm-{{ section.id }} .tm-subtitle-wrap {
+      width: 100%;
+      max-width: 320px;
+      padding-top: 0;
+    }
+    #tm-{{ section.id }} .tm-item {
+      font-size: {{ section.settings.item_font_size | times: 0.8 | round }}px;
+    }
+    #tm-{{ section.id }} .tm-right {
+      height: 55vw;
+      min-height: 200px;
+      max-height: 360px;
+      overflow: hidden;
+    }
+    #tm-{{ section.id }} .tm-img-stack {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      right: 0;
+    }
+    #tm-{{ section.id }} .tm-img-frame {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+</style>
+
+<section id="tm-{{ section.id }}">
+
+  <div class="tm-texture"></div>
+
+  <div class="tm-inner">
+
+    <!-- LEFT column: THE / TASTING / MENU+subtitle / menu list -->
+    <div class="tm-left">
+
+      <div class="tm-top-block">
+
+        <!-- "THE" small line -->
+        <span class="tm-pre">{{ section.settings.headline_pre }}</span>
+
+        <!-- "TASTING" giant -->
+        <span class="tm-big">{{ section.settings.headline_line1 }}</span>
+
+        <!-- "MENU" + subtitle flex row, subtitle top-aligned beside MENU -->
+        <div class="tm-menu-row">
+          <span class="tm-big">{{ section.settings.headline_line2 }}</span>
+          <div class="tm-subtitle-wrap">
+            <div class="tm-subtitle">{{ section.settings.subtitle }}</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Menu items list -->
+      <ul class="tm-menu">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'menu_item' -%}
+            <li
+              class="tm-item{% if forloop.first %} is-active{% endif %}"
+              data-index="{{ forloop.index0 }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="tm-label">{{- block.settings.item_label -}}</span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+    </div>
+
+    <!-- RIGHT column: image stack bottom-right -->
+    <div class="tm-right">
+      <div class="tm-img-stack">
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'menu_item' -%}
+            <div
+              class="tm-img-frame{% if forloop.first %} is-visible{% endif %}"
+              data-index="{{ forloop.index0 }}"
+            >
+              {%- if block.settings.item_image != blank -%}
+                <img
+                  src="{{ block.settings.item_image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.item_label | escape }}"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                >
+              {%- else -%}
+                {%- assign si = forloop.index0 | modulo: 5 -%}
+                <svg viewBox="0 0 520 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;opacity:0.82;">
+                  {%- if si == 0 -%}
+                  <ellipse cx="260" cy="370" rx="155" ry="44" stroke="#1a1a1a" stroke-width="2.2" fill="none"/>
+                  <ellipse cx="260" cy="362" rx="108" ry="31" stroke="#1a1a1a" stroke-width="1.3" fill="rgba(200,190,178,0.28)"/>
+                  <ellipse cx="255" cy="352" rx="60" ry="17" fill="rgba(160,130,100,0.42)" stroke="#1a1a1a" stroke-width="1"/>
+                  <circle cx="256" cy="344" r="11" fill="#8b1a1a" opacity="0.55"/>
+                  <circle cx="274" cy="352" r="7" fill="#8b1a1a" opacity="0.35"/>
+                  <line x1="148" y1="322" x2="148" y2="428" stroke="#1a1a1a" stroke-width="1.9"/>
+                  <line x1="140" y1="322" x2="140" y2="350" stroke="#1a1a1a" stroke-width="1.3"/>
+                  <line x1="148" y1="322" x2="148" y2="350" stroke="#1a1a1a" stroke-width="1.3"/>
+                  <line x1="156" y1="322" x2="156" y2="350" stroke="#1a1a1a" stroke-width="1.3"/>
+                  <line x1="378" y1="322" x2="378" y2="428" stroke="#1a1a1a" stroke-width="1.9"/>
+                  <path d="M378 322 Q390 348 378 372" stroke="#1a1a1a" stroke-width="1.6" fill="none"/>
+                  {%- elsif si == 1 -%}
+                  <path d="M230 185 L198 305 L298 305 L266 185 Z" stroke="#c0392b" stroke-width="2.2" fill="rgba(192,57,43,0.13)"/>
+                  <line x1="198" y1="305" x2="298" y2="305" stroke="#c0392b" stroke-width="2.2"/>
+                  <line x1="248" y1="305" x2="248" y2="355" stroke="#c0392b" stroke-width="1.9"/>
+                  <line x1="224" y1="355" x2="272" y2="355" stroke="#c0392b" stroke-width="1.9"/>
+                  <ellipse cx="248" cy="185" rx="22" ry="7" stroke="#c0392b" stroke-width="1.6" fill="none"/>
+                  <line x1="272" y1="190" x2="238" y2="245" stroke="#1a1a1a" stroke-width="1.3"/>
+                  <circle cx="274" cy="187" r="9" fill="#2d5a1b" stroke="#1a1a1a" stroke-width="1"/>
+                  <path d="M355 155 L355 208 Q355 220 365 226 L365 360 Q360 367 360 372 L380 372 Q380 367 375 360 L375 226 Q385 220 385 208 L385 155 Z" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(18,18,18,0.74)"/>
+                  <rect x="360" y="144" width="20" height="15" rx="3" fill="#1a1a1a"/>
+                  <line x1="198" y1="250" x2="298" y2="250" stroke="#c0392b" stroke-width="0.9" stroke-dasharray="5 4"/>
+                  {%- elsif si == 2 -%}
+                  <ellipse cx="255" cy="360" rx="160" ry="48" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>
+                  <ellipse cx="255" cy="352" rx="112" ry="34" stroke="#1a1a1a" stroke-width="1.3" fill="rgba(200,190,178,0.32)"/>
+                  <ellipse cx="248" cy="341" rx="65" ry="18" fill="rgba(155,125,95,0.44)" stroke="#1a1a1a" stroke-width="1"/>
+                  <path d="M188 336 Q202 319 228 324" stroke="#8b1a1a" stroke-width="1.6" fill="none"/>
+                  <path d="M385 258 Q376 308 364 332 M364 332 Q375 337 394 332 Q382 308 385 258Z" stroke="#c0392b" stroke-width="2.1" fill="rgba(192,57,43,0.2)"/>
+                  <line x1="379" y1="332" x2="379" y2="370" stroke="#c0392b" stroke-width="1.6"/>
+                  <line x1="364" y1="370" x2="394" y2="370" stroke="#c0392b" stroke-width="1.6"/>
+                  <ellipse cx="385" cy="258" rx="22" ry="7" stroke="#c0392b" stroke-width="1.6" fill="none"/>
+                  <rect x="136" y="228" width="13" height="105" fill="#c0392b" rx="2.5"/>
+                  <path d="M142 224 Q148 212 142 200 Q136 212 142 224Z" fill="#f39c12"/>
+                  {%- elsif si == 3 -%}
+                  <path d="M190 270 Q190 358 260 364 Q330 358 330 270 Z" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(198,218,238,0.28)"/>
+                  <line x1="260" y1="364" x2="260" y2="416" stroke="#1a1a1a" stroke-width="1.9"/>
+                  <line x1="236" y1="416" x2="284" y2="416" stroke="#1a1a1a" stroke-width="1.9"/>
+                  <ellipse cx="260" cy="270" rx="70" ry="22" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(178,208,228,0.42)"/>
+                  <path d="M260 263 Q274 244 292 238" stroke="#2d5a1b" stroke-width="1.6" fill="none"/>
+                  <ellipse cx="296" cy="235" rx="10" ry="6" fill="#3a7a22" transform="rotate(-30 296 235)" opacity="0.85"/>
+                  <ellipse cx="280" cy="246" rx="9" ry="5" fill="#3a7a22" transform="rotate(-10 280 246)" opacity="0.72"/>
+                  <circle cx="232" cy="267" r="20" fill="rgba(255,218,48,0.48)" stroke="#c8a800" stroke-width="1.3"/>
+                  <line x1="212" y1="267" x2="252" y2="267" stroke="#c8a800" stroke-width="0.9"/>
+                  <line x1="232" y1="247" x2="232" y2="287" stroke="#c8a800" stroke-width="0.9"/>
+                  {%- else -%}
+                  <rect x="155" y="302" width="210" height="88" rx="5" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(198,158,118,0.28)"/>
+                  <rect x="174" y="262" width="172" height="46" rx="4" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(218,178,138,0.38)"/>
+                  <rect x="194" y="230" width="132" height="38" rx="3" stroke="#1a1a1a" stroke-width="2.2" fill="rgba(238,198,158,0.44)"/>
+                  <rect x="255" y="200" width="12" height="34" fill="#c0392b" rx="2.5"/>
+                  <path d="M261 196 Q267 185 261 173 Q255 185 261 196Z" fill="#f39c12"/>
+                  <ellipse cx="260" cy="395" rx="140" ry="19" stroke="#1a1a1a" stroke-width="1.6" fill="none"/>
+                  {%- endif -%}
+                </svg>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  function init() {
+    var section = document.getElementById('tm-{{ section.id }}');
+    if (!section) return;
+    var items  = Array.from(section.querySelectorAll('.tm-item'));
+    var frames = Array.from(section.querySelectorAll('.tm-img-frame'));
+    function activate(idx) {
+      items.forEach(function (el, i)  { el.classList.toggle('is-active', i === idx); });
+      frames.forEach(function (fr, i) { fr.classList.toggle('is-visible', i === idx); });
+    }
+    items.forEach(function (item) {
+      item.addEventListener('click', function () {
+        activate(parseInt(item.getAttribute('data-index'), 10));
+      });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ENSNE Tasting Menu",
+  "tag": "section",
+  "class": "section-ensne-tasting-menu",
+  "blocks": [
+    {
+      "type": "menu_item",
+      "name": "Menu Item",
+      "settings": [
+        { "type": "text",         "id": "item_label", "label": "Label",               "default": "Appetizers" },
+        { "type": "image_picker", "id": "item_image", "label": "Image (right panel)", "info": "Shown when item is active. Leave blank for built-in illustration." },
+        { "type": "url",          "id": "item_link",  "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "settings": [
+
+    { "type": "header", "content": "-- Layout --" },
+    { "type": "range", "id": "left_col_width",         "label": "Left column width (%)",      "min": 45, "max": 75, "step": 1,  "default": 60 },
+    { "type": "range", "id": "section_padding_top",    "label": "Padding top (px)",           "min": 0,  "max": 120,"step": 2,  "default": 40 },
+    { "type": "range", "id": "section_padding_bottom", "label": "Padding bottom (px)",        "min": 0,  "max": 120,"step": 2,  "default": 48 },
+    { "type": "range", "id": "section_padding_left",   "label": "Padding left (px)",          "min": 0,  "max": 120,"step": 2,  "default": 76 },
+    { "type": "range", "id": "section_padding_right",  "label": "Padding right (px)",         "min": 0,  "max": 80, "step": 2,  "default": 20 },
+    { "type": "range", "id": "headline_to_menu_gap",   "label": "Headline to menu list gap (px)", "min": 0, "max": 100, "step": 2, "default": 44 },
+
+    { "type": "header", "content": "-- Headline text --" },
+    { "type": "text", "id": "headline_pre",   "label": "Small top line",  "default": "THE" },
+    { "type": "text", "id": "headline_line1", "label": "Giant line 1",    "default": "TASTING" },
+    { "type": "text", "id": "headline_line2", "label": "Giant line 2",    "default": "MENU" },
+
+    { "type": "header", "content": "-- THE pre-line typography --" },
+    { "type": "range", "id": "pre_font_size",      "label": "Font size (px)",                    "min": 12, "max": 80,  "step": 1,   "default": 32 },
+    { "type": "range", "id": "pre_font_weight",    "label": "Font weight",                       "min": 400,"max": 900, "step": 100, "default": 900 },
+    { "type": "range", "id": "pre_letter_spacing", "label": "Letter spacing (divide by 100 = em)","min": -5, "max": 50,  "step": 1,   "default": 4, "info": "e.g. 4 = 0.04em" },
+    { "type": "range", "id": "pre_bottom_gap",     "label": "Gap below THE (px)",                "min": 0,  "max": 20,  "step": 1,   "default": 0 },
+
+    { "type": "header", "content": "-- Giant headline typography (TASTING / MENU) --" },
+    { "type": "range", "id": "headline_font_size",      "label": "Font size (px)",                     "min": 40, "max": 200, "step": 2,   "default": 112 },
+    { "type": "range", "id": "headline_font_weight",    "label": "Font weight",                        "min": 400,"max": 900, "step": 100, "default": 900 },
+    { "type": "range", "id": "headline_line_height",    "label": "Line height (divide by 100)",        "min": 70, "max": 110, "step": 1,   "default": 88, "info": "e.g. 88 = 0.88" },
+    { "type": "range", "id": "headline_letter_spacing", "label": "Letter spacing (divide by 100 = em)","min": -5, "max": 20,  "step": 1,   "default": -1, "info": "e.g. -1 = -0.01em" },
+
+    { "type": "header", "content": "-- Subtitle (beside MENU) --" },
+    { "type": "richtext", "id": "subtitle", "label": "Subtitle text", "default": "<p>A limited run of drops - served in small batches, just enough to give you a <strong>taste of what we have been cooking.</strong></p>" },
+    { "type": "range", "id": "menu_subtitle_gap",       "label": "Gap between MENU and subtitle (px)",  "min": 4,  "max": 60,  "step": 2,   "default": 16 },
+    { "type": "range", "id": "subtitle_top_offset",     "label": "Subtitle top offset (px)",            "min": 0,  "max": 80,  "step": 1,   "default": 14, "info": "Pushes subtitle down from the MENU cap-height to match design position" },
+    { "type": "range", "id": "subtitle_width",          "label": "Subtitle box width (px)",             "min": 80, "max": 320, "step": 4,   "default": 172 },
+    { "type": "range", "id": "subtitle_font_size",      "label": "Font size (px)",                      "min": 7,  "max": 22,  "step": 1,   "default": 11 },
+    { "type": "range", "id": "subtitle_font_weight",    "label": "Font weight",                         "min": 300,"max": 700, "step": 100, "default": 400 },
+    { "type": "range", "id": "subtitle_line_height",    "label": "Line height (divide by 100)",         "min": 100,"max": 250, "step": 5,   "default": 175, "info": "e.g. 175 = 1.75" },
+    { "type": "range", "id": "subtitle_letter_spacing", "label": "Letter spacing (divide by 100 = em)", "min": 0,  "max": 20,  "step": 1,   "default": 4, "info": "e.g. 4 = 0.04em" },
+    { "type": "range", "id": "subtitle_accent_weight",  "label": "Bold accent font weight",             "min": 400,"max": 900, "step": 100, "default": 700 },
+
+    { "type": "header", "content": "-- Menu item typography --" },
+    { "type": "range", "id": "item_font_size",      "label": "Font size (px)",                     "min": 14, "max": 56,  "step": 1,   "default": 26 },
+    { "type": "range", "id": "item_font_weight",    "label": "Font weight",                        "min": 400,"max": 900, "step": 100, "default": 700 },
+    { "type": "range", "id": "item_letter_spacing", "label": "Letter spacing (divide by 100 = em)","min": 0,  "max": 30,  "step": 1,   "default": 8, "info": "e.g. 8 = 0.08em" },
+    { "type": "range", "id": "item_padding_v",      "label": "Row vertical padding (px)",          "min": 2,  "max": 28,  "step": 1,   "default": 9 },
+
+    { "type": "header", "content": "-- Patch / highlight box --" },
+    { "type": "range", "id": "patch_top",       "label": "Patch top offset (px)",       "min": -20, "max": 40, "step": 1, "default": 5,   "info": "Distance from top of the label element. 5 = slightly below cap-height" },
+    { "type": "range", "id": "patch_height",    "label": "Patch height (px)",           "min": 10,  "max": 80, "step": 1, "default": 36,  "info": "Total height of the patch rectangle" },
+    { "type": "range", "id": "patch_max_width", "label": "Patch max width (px)",        "min": 50,  "max": 600,"step": 10, "default": 400, "info": "Caps how wide the patch can grow" },
+    { "type": "range", "id": "patch_padding_h", "label": "Patch horizontal padding (px)","min": 0,  "max": 24, "step": 1, "default": 6,   "info": "Extra width left and right of the text" },
+    { "type": "image_picker", "id": "patch_image",  "label": "Patch image (brushstroke)", "info": "Displayed behind active label text. Leave blank to use solid colour." },
+    { "type": "color",        "id": "patch_colour", "label": "Patch colour (fallback)",   "default": "#811313" },
+
+    { "type": "header", "content": "-- Colours --" },
+    { "type": "color", "id": "headline_colour",    "label": "Headline colour",       "default": "#111111" },
+    { "type": "color", "id": "subtitle_colour",    "label": "Subtitle colour",       "default": "#1a1a1a" },
+    { "type": "color", "id": "accent_colour",      "label": "Subtitle bold accent",  "default": "#811313" },
+    { "type": "color", "id": "menu_colour",        "label": "Menu item (inactive)",  "default": "#111111" },
+    { "type": "color", "id": "menu_active_colour", "label": "Menu item (active)",    "default": "#811313" },
+
+    { "type": "header", "content": "-- Background --" },
+    { "type": "image_picker", "id": "bg_texture", "label": "Canvas texture image", "info": "Leave blank for CSS crosshatch fallback." },
+    { "type": "color", "id": "bg_colour",  "label": "Background colour", "default": "#e8e3d8" },
+    { "type": "range", "id": "bg_opacity", "label": "Texture opacity",   "min": 20, "max": 100, "step": 5, "default": 100, "unit": "%" },
+
+    { "type": "header", "content": "-- Image panel --" },
+    { "type": "range", "id": "img_width",       "label": "Image width (px)",      "min": 200, "max": 800, "step": 10, "default": 520 },
+    { "type": "range", "id": "img_height",      "label": "Image height (px)",     "min": 200, "max": 900, "step": 10, "default": 680 },
+    { "type": "range", "id": "img_bleed_right", "label": "Right bleed offset (px)", "min": 0, "max": 80,  "step": 2,  "default": 20, "info": "How many px the image bleeds off the right edge" }
+
+  ],
+  "presets": [
+    {
+      "name": "ENSNE Tasting Menu",
+      "category": "Custom",
+      "blocks": [
+        { "type": "menu_item", "settings": { "item_label": "Appetizers" } },
+        { "type": "menu_item", "settings": { "item_label": "Cocktails" } },
+        { "type": "menu_item", "settings": { "item_label": "Entrees" } },
+        { "type": "menu_item", "settings": { "item_label": "Palate Cleansers" } },
+        { "type": "menu_item", "settings": { "item_label": "Desserts" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

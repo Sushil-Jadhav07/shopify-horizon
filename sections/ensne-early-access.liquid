@@ -1,0 +1,498 @@
+{% comment %}
+  ENSNE - Early Access Gate Section
+  File: sections/ensne-early-access.liquid
+
+  Fixes applied:
+  1. body_colour default changed to #ffffff (white) - visible on dark blurred image
+  2. Community link text always renders - no longer hidden when URL is blank
+  3. ea-accent class properly styled in CSS
+  4. Schema header strings use plain ASCII (no Unicode dashes)
+  5. Non-ASCII chars removed from schema JSON
+{% endcomment %}
+
+<style>
+  #ea-{{ section.id }},
+  #ea-{{ section.id }} *,
+  #ea-{{ section.id }} *::before,
+  #ea-{{ section.id }} *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Section */
+  #ea-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: {{ section.settings.bg_colour }};
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    overflow: hidden;
+  }
+
+  /* Label bar */
+  #ea-{{ section.id }} .ea-label-bar {
+    position: relative;
+    z-index: 10;
+    padding: clamp(18px, 2.8vh, 36px) clamp(20px, 4vw, 60px);
+    background: {{ section.settings.label_bg_colour }};
+  }
+
+  #ea-{{ section.id }} .ea-label {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(13px, 1.3vw, 20px);
+    letter-spacing: 0.22em;
+    color: {{ section.settings.label_colour }};
+    text-transform: uppercase;
+  }
+
+  #ea-{{ section.id }} .ea-label strong {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: {{ section.settings.accent_colour }};
+  }
+
+  /* Background image */
+  #ea-{{ section.id }} .ea-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  #ea-{{ section.id }} .ea-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: {{ section.settings.img_pos_x }}% {{ section.settings.img_pos_y }}%;
+    filter:
+      grayscale({{ section.settings.img_grayscale }}%)
+      blur({{ section.settings.img_blur }}px)
+      brightness({{ section.settings.img_brightness | divided_by: 100.0 }})
+      contrast({{ section.settings.img_contrast | divided_by: 100.0 }});
+    transform: scale(1.04);
+  }
+
+  #ea-{{ section.id }} .ea-bg-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #9a9a9a 0%, #5a5a5a 50%, #3a3a3a 100%);
+  }
+
+  #ea-{{ section.id }} .ea-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: {{ section.settings.overlay_colour }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  /* Content area (centred over image) */
+  #ea-{{ section.id }} .ea-content {
+    position: relative;
+    z-index: 5;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(40px, 8vh, 100px) clamp(20px, 5vw, 60px);
+    text-align: center;
+    gap: clamp(18px, 3vh, 32px);
+  }
+
+  /* Serving date */
+  #ea-{{ section.id }} .ea-serving {
+    font-family: var(--font-menu, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: 700;
+    font-style: normal;
+    font-size: clamp(15px, 1.4vw, 22px);
+    letter-spacing: 0em;
+    color: {{ section.settings.serving_colour }};
+  }
+
+  /* Code input pill */
+  #ea-{{ section.id }} .ea-code-wrap {
+    position: relative;
+    width: clamp(260px, 38vw, 420px);
+  }
+
+  #ea-{{ section.id }} .ea-code-input {
+    width: 100%;
+    padding: clamp(14px, 1.8vh, 20px) clamp(24px, 3vw, 36px);
+    border-radius: 999px;
+    border: 1.5px solid {{ section.settings.pill_border_colour }};
+    background: {{ section.settings.pill_bg_colour }};
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(14px, 1.2vw, 18px);
+    letter-spacing: 0em;
+    color: {{ section.settings.pill_text_colour }};
+    text-align: center;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  #ea-{{ section.id }} .ea-code-input::placeholder {
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0em;
+    color: {{ section.settings.pill_placeholder_colour }};
+    opacity: 1;
+  }
+
+  #ea-{{ section.id }} .ea-code-input:focus {
+    border-color: {{ section.settings.accent_colour }};
+    box-shadow: 0 0 0 3px {{ section.settings.accent_colour }}33;
+  }
+
+  #ea-{{ section.id }} .ea-code-btn {
+    position: absolute;
+    right: clamp(14px, 1.5vw, 20px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    color: {{ section.settings.accent_colour }};
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(10px, 0.85vw, 13px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  #ea-{{ section.id }} .ea-code-input:not(:placeholder-shown) ~ .ea-code-btn {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #ea-{{ section.id }} .ea-code-input.ea-error {
+    border-color: #c0392b;
+    animation: ea-shake 0.4s ease;
+  }
+
+  #ea-{{ section.id }} .ea-code-input.ea-success {
+    border-color: #27ae60;
+  }
+
+  #ea-{{ section.id }} .ea-feedback {
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(10px, 0.9vw, 13px);
+    letter-spacing: 0.1em;
+    margin-top: -8px;
+    min-height: 1.4em;
+    transition: color 0.2s;
+  }
+
+  #ea-{{ section.id }} .ea-feedback.ea-feedback-error { color: #c0392b; }
+  #ea-{{ section.id }} .ea-feedback.ea-feedback-ok    { color: #27ae60; }
+
+  @keyframes ea-shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-8px); }
+    40%      { transform: translateX(8px); }
+    60%      { transform: translateX(-5px); }
+    80%      { transform: translateX(5px); }
+  }
+
+  /* Community text
+     FIX: body_colour defaults to #ffffff so it is visible on dark blurred image */
+  #ea-{{ section.id }} .ea-community {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(12px, 1.1vw, 16px);
+    letter-spacing: 0em;
+    color: {{ section.settings.body_colour }};
+    line-height: 1.7;
+  }
+
+  /* FIX: .ea-accent class was missing — now properly defined.
+     Both <a> and <span class="ea-accent"> render in crimson, inline. */
+  #ea-{{ section.id }} .ea-community a,
+  #ea-{{ section.id }} .ea-community .ea-accent {
+    font-family: var(--font-label, 'Archivo Narrow', sans-serif);
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0em;
+    color: {{ section.settings.accent_colour }};
+    text-decoration: none;
+    display: inline;
+  }
+
+  #ea-{{ section.id }} .ea-community a:hover {
+    text-decoration: underline;
+  }
+
+  /* Footer note */
+  #ea-{{ section.id }} .ea-note {
+    position: absolute;
+    bottom: clamp(16px, 3vh, 30px);
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 5;
+    padding: 0 clamp(20px, 5vw, 60px);
+  }
+
+  #ea-{{ section.id }} .ea-note p {
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(10px, 0.95vw, 14px);
+    letter-spacing: 0.092em;
+    color: {{ section.settings.note_colour }};
+    line-height: 1.6;
+  }
+
+  #ea-{{ section.id }} .ea-note a {
+    font-family: var(--font-body, 'Atkinson Hyperlegible', sans-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: {{ section.settings.accent_colour }};
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    #ea-{{ section.id }} .ea-code-wrap {
+      width: 90vw;
+    }
+  }
+</style>
+
+<div id="ea-{{ section.id }}">
+
+  <div class="ea-bg">
+    {%- if section.settings.bg_image != blank -%}
+      {%- assign bgi = section.settings.bg_image -%}
+      <img
+        src="{{ bgi | image_url: width: 2000 }}"
+        srcset="{{ bgi | image_url: width: 900 }} 900w, {{ bgi | image_url: width: 1600 }} 1600w, {{ bgi | image_url: width: 2000 }} 2000w"
+        sizes="100vw"
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+      >
+    {%- else -%}
+      <div class="ea-bg-placeholder"></div>
+    {%- endif -%}
+    <div class="ea-bg-overlay"></div>
+  </div>
+
+  <div class="ea-label-bar">
+    <span class="ea-label">{{ section.settings.section_label }}</span>
+  </div>
+
+  <div class="ea-content">
+
+    {%- if section.settings.serving_text != blank -%}
+      <p class="ea-serving">{{ section.settings.serving_text }}</p>
+    {%- endif -%}
+
+    <div class="ea-code-wrap">
+      <input
+        class="ea-code-input"
+        id="ea-input-{{ section.id }}"
+        type="text"
+        placeholder="{{ section.settings.pill_placeholder }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Enter access code"
+      >
+      <button class="ea-code-btn" id="ea-btn-{{ section.id }}" aria-label="Submit code">&#8594;</button>
+    </div>
+
+    <p class="ea-feedback" id="ea-feedback-{{ section.id }}" aria-live="polite"></p>
+
+    {%- if section.settings.community_line1 != blank -%}
+      <div class="ea-community">
+        <p>
+          {{ section.settings.community_line1 }}
+          {%- comment -%}
+            FIX: accent link text always shows.
+            If a URL is set, renders as <a>. If no URL, renders as <span class="ea-accent">.
+            Previously hidden entirely when URL was blank.
+          {%- endcomment -%}
+          {%- if section.settings.community_link_text != blank -%}
+            {%- if section.settings.community_link != blank -%}
+              <a href="{{ section.settings.community_link }}" class="ea-accent">{{ section.settings.community_link_text }}</a>
+            {%- else -%}
+              <span class="ea-accent">{{ section.settings.community_link_text }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </p>
+        {%- if section.settings.community_line2 != blank -%}
+          <p>{{ section.settings.community_line2 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+
+  {%- if section.settings.footer_note != blank -%}
+    <div class="ea-note">
+      <p>{{ section.settings.footer_note }}</p>
+    </div>
+  {%- endif -%}
+
+</div>
+
+<script>
+(function () {
+  var SECTION_ID   = 'ea-{{ section.id }}';
+  var RAW_CODES    = '{{ section.settings.access_codes | escape }}';
+  var REDIRECT_URL = '{{ section.settings.success_redirect }}';
+  var MSG_WRONG    = '{{ section.settings.msg_wrong | escape }}';
+  var MSG_EMPTY    = '{{ section.settings.msg_empty | escape }}';
+  var MSG_OK       = '{{ section.settings.msg_success | escape }}';
+
+  var validCodes = RAW_CODES
+    .split(',')
+    .map(function (c) { return c.trim().toLowerCase(); })
+    .filter(function (c) { return c.length > 0; });
+
+  function init() {
+    var input    = document.getElementById('ea-input-' + SECTION_ID);
+    var btn      = document.getElementById('ea-btn-'   + SECTION_ID);
+    var feedback = document.getElementById('ea-feedback-' + SECTION_ID);
+    if (!input || !btn || !feedback) return;
+
+    function showError(msg) {
+      input.classList.remove('ea-success');
+      input.classList.add('ea-error');
+      feedback.textContent = msg;
+      feedback.className = 'ea-feedback ea-feedback-error';
+      setTimeout(function () { input.classList.remove('ea-error'); }, 500);
+    }
+
+    function showSuccess(msg) {
+      input.classList.remove('ea-error');
+      input.classList.add('ea-success');
+      feedback.textContent = msg;
+      feedback.className = 'ea-feedback ea-feedback-ok';
+    }
+
+    function validate() {
+      var entered = input.value.trim().toLowerCase();
+      if (!entered) {
+        showError(MSG_EMPTY || 'Please enter your access code.');
+        return;
+      }
+      if (validCodes.length === 0 || validCodes.indexOf(entered) !== -1) {
+        showSuccess(MSG_OK || 'Access granted - redirecting...');
+        input.disabled = true;
+        btn.disabled   = true;
+        if (REDIRECT_URL && REDIRECT_URL !== '#') {
+          setTimeout(function () { window.location.href = REDIRECT_URL; }, 800);
+        }
+      } else {
+        showError(MSG_WRONG || 'Incorrect code. Try again.');
+        input.select();
+      }
+    }
+
+    btn.addEventListener('click', validate);
+    input.addEventListener('keydown', function (e) {
+      input.classList.remove('ea-error');
+      feedback.textContent = '';
+      feedback.className = 'ea-feedback';
+      if (e.key === 'Enter') { e.preventDefault(); validate(); }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "ENSNE Early Access",
+  "tag": "section",
+  "class": "section-ensne-early-access",
+  "settings": [
+    { "type": "header", "content": "-- Label --" },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Top category label",
+      "default": "EN TR EES",
+      "info": "Wrap bold letters in <strong>XX</strong> for Bold Italic accent e.g. EN<strong>TR</strong>EES"
+    },
+
+    { "type": "header", "content": "-- Background Image --" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image", "info": "Full-bleed. Filters applied below." },
+    { "type": "range", "id": "img_grayscale",   "label": "Grayscale (%)",   "min": 0,  "max": 100, "step": 5,  "default": 100, "unit": "%" },
+    { "type": "range", "id": "img_blur",        "label": "Blur (px)",       "min": 0,  "max": 20,  "step": 1,  "default": 3,   "unit": "px" },
+    { "type": "range", "id": "img_brightness",  "label": "Brightness (%)",  "min": 40, "max": 120, "step": 5,  "default": 80,  "unit": "%" },
+    { "type": "range", "id": "img_contrast",    "label": "Contrast (%)",    "min": 70, "max": 140, "step": 5,  "default": 95,  "unit": "%" },
+    { "type": "range", "id": "img_pos_x",       "label": "Image position X","min": 0,  "max": 100, "step": 5,  "default": 50,  "unit": "%" },
+    { "type": "range", "id": "img_pos_y",       "label": "Image position Y","min": 0,  "max": 100, "step": 5,  "default": 30,  "unit": "%" },
+    { "type": "color", "id": "overlay_colour",  "label": "Overlay colour",  "default": "#ffffff" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 0,  "max": 70,  "step": 5,  "default": 10,  "unit": "%" },
+
+    { "type": "header", "content": "-- Serving Date --" },
+    { "type": "text", "id": "serving_text", "label": "Serving date label", "default": "serving [ 18 / 05 ]" },
+
+    { "type": "header", "content": "-- Code Entry --" },
+    { "type": "text",     "id": "pill_placeholder", "label": "Pill placeholder text",                     "default": "enter code" },
+    { "type": "textarea", "id": "access_codes",     "label": "Valid access codes (comma-separated)",      "default": "ensne2025, tasting, vip", "info": "Case-insensitive. Leave blank to allow any code." },
+    { "type": "url",      "id": "success_redirect", "label": "Redirect URL on success" },
+    { "type": "text",     "id": "msg_success",      "label": "Success message",   "default": "Access granted - redirecting..." },
+    { "type": "text",     "id": "msg_wrong",        "label": "Wrong code message","default": "Incorrect code. Try again." },
+    { "type": "text",     "id": "msg_empty",        "label": "Empty input message","default": "Please enter your access code." },
+
+    { "type": "header", "content": "-- Community Text --" },
+    { "type": "text", "id": "community_line1",     "label": "Community line 1",     "default": "24 hour early access to our " },
+    { "type": "text", "id": "community_link_text", "label": "Accent link text",     "default": "ENSNE community *", "info": "Always visible in crimson. Add a URL below to make it a link." },
+    { "type": "url",  "id": "community_link",      "label": "Accent link URL (optional)" },
+    { "type": "text", "id": "community_line2",     "label": "Community date line",  "default": "[ 17 / 05 ]" },
+
+    { "type": "header", "content": "-- Footer Note --" },
+    { "type": "textarea", "id": "footer_note", "label": "Footer italic note", "default": "* If you've ordered before, you already have a seat at our table reserved. Check inbox or WhatsApp us for the early access code." },
+
+    { "type": "header", "content": "-- Colours --" },
+    { "type": "color", "id": "bg_colour",               "label": "Section background (fallback)", "default": "#d8d4cc" },
+    { "type": "color", "id": "label_bg_colour",         "label": "Label bar background",          "default": "#e8e4dc" },
+    { "type": "color", "id": "label_colour",            "label": "Label text colour",             "default": "#811313" },
+    { "type": "color", "id": "accent_colour",           "label": "Accent colour",                 "default": "#811313" },
+    { "type": "color", "id": "serving_colour",          "label": "Serving date colour",           "default": "#ffffff" },
+    { "type": "color", "id": "pill_bg_colour",          "label": "Pill background",               "default": "#e8e4dc" },
+    { "type": "color", "id": "pill_border_colour",      "label": "Pill border colour",            "default": "#811313" },
+    { "type": "color", "id": "pill_text_colour",        "label": "Pill text colour",              "default": "#811313" },
+    { "type": "color", "id": "pill_placeholder_colour", "label": "Pill placeholder colour",       "default": "#811313" },
+    { "type": "color", "id": "body_colour",             "label": "Community text colour",         "default": "#ffffff", "info": "White recommended - text sits over dark blurred image" },
+    { "type": "color", "id": "note_colour",             "label": "Footer note colour",            "default": "#811313" }
+  ],
+  "presets": [
+    {
+      "name": "ENSNE Early Access",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
