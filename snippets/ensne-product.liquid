@@ -1,0 +1,211 @@
+<style>
+  /* ── ENSNE Product Page Styles ── */
+
+  /* Off-white background scoped to product template */
+  main[data-template="product"] .product-information,
+  main[data-template="product"] .section-background {
+    background-color: #f1f1f1 !important;
+    --color-background: #f1f1f1 !important;
+  }
+
+  /* Product type label — "THE TASTING MENU" */
+  main[data-template="product"] .ensne-product-type {
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    color: #6b001f !important;
+    margin: 0 0 2px !important;
+    display: block !important;
+  }
+
+  /* Product title — Cubao Free editorial display */
+  main[data-template="product"] .product-details h1,
+  main[data-template="product"] .product-details [role="heading"][aria-level="3"] {
+    font-family: 'Cubao Free', sans-serif !important;
+    font-size: clamp(2.6rem, 5.5vw, 4.6rem) !important;
+    line-height: 0.93 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: uppercase !important;
+    color: #0d0d0d !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+  }
+
+  /* Price */
+  main[data-template="product"] .product-details .price {
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    color: #111 !important;
+  }
+
+  main[data-template="product"] .product-details .compare-at-price {
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 13px !important;
+    color: #999 !important;
+  }
+
+  /* Divider line */
+  main[data-template="product"] .product-details hr,
+  main[data-template="product"] .product-details [class*="divider-block"] {
+    --color-border: #d0d0d0 !important;
+    border-color: #d0d0d0 !important;
+    background: #d0d0d0 !important;
+  }
+
+  /* Variant/size option legend */
+  main[data-template="product"] .variant-picker .variant-option legend,
+  main[data-template="product"] .variant-picker .variant-option .variant-option__swatch-value {
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 11px !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    color: #888 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Size button layout */
+  main[data-template="product"] .variant-picker .variant-option--buttons {
+    display: flex !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Individual size button */
+  main[data-template="product"] .variant-picker .variant-option__button-label {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #bbb !important;
+    border-radius: 3px !important;
+    padding: 7px 16px !important;
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 12px !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    min-width: 44px !important;
+    transition: background 0.12s, color 0.12s, border-color 0.12s !important;
+  }
+
+  main[data-template="product"] .variant-picker .variant-option__button-label:hover {
+    border-color: #111 !important;
+  }
+
+  /* Selected size */
+  main[data-template="product"] .variant-picker .variant-option__button-label:has(input:checked) {
+    background: #0d0d0d !important;
+    color: #f1f1f1 !important;
+    border-color: #0d0d0d !important;
+  }
+
+  /* Sold-out size */
+  main[data-template="product"] .variant-picker .variant-option__button-label:has(input[aria-disabled="true"]) {
+    opacity: 0.32 !important;
+    cursor: default !important;
+  }
+
+  /* Hide the decorative pill inside size buttons */
+  main[data-template="product"] .variant-option__button-label__pill {
+    display: none !important;
+  }
+
+  /* ADD TO BAG button */
+  main[data-template="product"] .add-to-cart-button,
+  main[data-template="product"] button[name="add"] {
+    background: #0d0d0d !important;
+    color: #f1f1f1 !important;
+    border-radius: 100px !important;
+    border: none !important;
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 12px !important;
+    letter-spacing: 0.3em !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    min-height: 54px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    transition: background 0.15s !important;
+  }
+
+  main[data-template="product"] .add-to-cart-button:hover:not([disabled]),
+  main[data-template="product"] button[name="add"]:hover:not([disabled]) {
+    background: #6b001f !important;
+  }
+
+  main[data-template="product"] .add-to-cart-button[disabled],
+  main[data-template="product"] button[name="add"][disabled] {
+    background: #aaa !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+  }
+
+  /* Hide the SVG cart icon on product page button */
+  main[data-template="product"] .add-to-cart-icon {
+    display: none !important;
+  }
+
+  /* "Added" checkmark burst — keep it visible */
+  main[data-template="product"] .add-to-cart__added-icon svg {
+    stroke: #f1f1f1 !important;
+    fill: none !important;
+  }
+
+  /* Description text */
+  main[data-template="product"] .product-details .rte,
+  main[data-template="product"] .product-details .rte p {
+    font-family: 'Atkinson Hyperlegible', sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+    color: #555 !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  /* Accordion container */
+  main[data-template="product"] .accordion {
+    --color-background: transparent !important;
+  }
+
+  /* Accordion section header */
+  main[data-template="product"] .accordion .details__header {
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 11px !important;
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    color: #111 !important;
+  }
+
+  /* Accordion divider lines */
+  main[data-template="product"] .accordion--dividers accordion-custom .details {
+    --color-border: #d0d0d0 !important;
+    border-color: #d0d0d0 !important;
+  }
+
+  main[data-template="product"] .accordion--dividers accordion-custom:first-child .details,
+  main[data-template="product"] .accordion--dividers accordion-custom:last-child .details {
+    border-color: #d0d0d0 !important;
+  }
+
+  /* Accordion body content */
+  main[data-template="product"] .accordion .details-content .rte,
+  main[data-template="product"] .accordion .details-content p {
+    font-family: 'Atkinson Hyperlegible', sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+    color: #555 !important;
+  }
+
+  /* Product details padding */
+  @media screen and (min-width: 750px) {
+    main[data-template="product"] .product-details {
+      padding-inline-start: 32px !important;
+    }
+  }
+</style>

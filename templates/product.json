@@ -104,6 +104,32 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "ensne_type_label": {
+                  "type": "text",
+                  "name": "Product Type Label",
+                  "settings": {
+                    "text": "<p class=\"ensne-product-type\">{{ closest.product.type }}</p>",
+                    "width": "100%",
+                    "max_width": "none",
+                    "alignment": "left",
+                    "type_preset": "paragraph",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
                 "text_xrnftG": {
                   "type": "text",
                   "name": "Product title",
@@ -154,6 +180,7 @@
                 }
               },
               "block_order": [
+                "ensne_type_label",
                 "text_xrnftG",
                 "price_tVjtKg"
               ]
