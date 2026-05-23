@@ -38,40 +38,54 @@
 
   .ensne-cart-drawer__header {
     background: #f6f3f3 !important;
-    padding: 20px 14px 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-rows: auto 1px auto !important;
+    column-gap: 12px !important;
+    row-gap: 6px !important;
+    padding: 18px 18px 0 !important;
     flex-shrink: 0 !important;
   }
 
   /* Row 1: title + close button */
   .ensne-cart-drawer__top-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding-bottom: 2px;
+    display: contents;
   }
 
   /* "YOUR BAG" heading */
   .ensne-cart-drawer__heading {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
     font-family: 'Archivo Narrow', sans-serif !important;
     font-weight: 700 !important;
-    font-size: 14px !important;
-    letter-spacing: 0.12em !important;
+    font-size: 15px !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
     color: #111 !important;
     line-height: 1 !important;
     margin: 0 !important;
     padding: 0 !important;
+    white-space: nowrap !important;
   }
 
   /* "[ 02 ]" — maroon */
   .ensne-cart-drawer__count {
+    display: inline-block !important;
     color: #6b001f !important;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
+    white-space: nowrap !important;
   }
 
   /* Close button */
   .cart-drawer__close-button {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    align-self: start !important;
     color: #111 !important;
     padding: 0 !important;
     line-height: 1 !important;
@@ -94,6 +108,8 @@
 
   /* Divider line */
   .ensne-cart-drawer__divider {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
     height: 1px;
     background: #a5a1a1;
     width: 100%;
@@ -101,18 +117,21 @@
 
   /* Row 3: "serving soon" right-aligned */
   .ensne-cart-drawer__bottom-row {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
     display: flex;
     justify-content: flex-end;
-    padding: 1px 0 10px;
+    padding: 0 0 8px;
   }
 
   .ensne-cart-drawer__serving-tag {
     font-family: 'Archivo Narrow', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: #6b001f;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     text-transform: lowercase;
+    white-space: nowrap !important;
   }
 
   /* ═══════════════════════════════
@@ -165,11 +184,11 @@
 
   .cart-drawer .cart-items__table-row {
     display: grid !important;
-    grid-template-columns: 76px 1fr auto !important;
+    grid-template-columns: 92px minmax(0, 1fr) auto !important;
     grid-template-rows: auto auto !important;
-    column-gap: 14px !important;
+    column-gap: 18px !important;
     row-gap: 0 !important;
-    padding: 18px 14px 20px !important;
+    padding: 20px 22px 24px !important;
     border-bottom: 1px solid #bdb8b8 !important;
     align-items: start !important;
     background: transparent !important;
@@ -180,14 +199,14 @@
     grid-column: 1 !important;
     grid-row: 1 / 3 !important;
     padding: 0 !important;
-    width: 76px !important;
+    width: 92px !important;
     align-self: start !important;
   }
 
   .cart-drawer .cart-items__media-container {
     display: block !important;
-    width: 76px !important;
-    height: 76px !important;
+    width: 92px !important;
+    height: 92px !important;
     overflow: hidden !important;
     border-radius: 2px !important;
   }
@@ -210,34 +229,36 @@
     padding: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 3px !important;
+    gap: 2px !important;
+    min-width: 0 !important;
   }
 
   .cart-drawer .cart-items__product-info {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
+    min-width: 0;
   }
 
   /* Product name */
   .cart-drawer .cart-items__title {
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
     color: #111 !important;
     text-decoration: none !important;
     text-transform: lowercase !important;
-    letter-spacing: 0.03em !important;
-    line-height: 1.3 !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1.15 !important;
   }
 
   /* "serving soon" subtitle */
   .ensne-cart-item__subtitle {
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 400 !important;
     color: #8d8a8a !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.06em !important;
     margin: 0 !important;
     text-transform: lowercase !important;
     line-height: 1.3 !important;
@@ -245,7 +266,7 @@
 
   /* Variant options */
   .cart-drawer .cart-items__variants-wrapper {
-    margin-top: 2px !important;
+    display: none !important;
   }
 
   .cart-drawer .cart-items__variants {
@@ -275,7 +296,7 @@
     padding: 0 !important;
     align-self: start !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
     color: #111 !important;
     white-space: nowrap !important;
@@ -285,7 +306,7 @@
   .cart-drawer .cart-items__price text-component {
     color: #111 !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
   }
 
@@ -293,7 +314,7 @@
   .cart-drawer .cart-items__quantity {
     grid-column: 2 / 4 !important;
     grid-row: 2 !important;
-    padding: 9px 0 0 !important;
+    padding: 14px 0 0 !important;
     width: auto !important;
   }
 
@@ -310,7 +331,7 @@
   .cart-drawer .cart-items__quantity-controls {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 10px !important;
     flex-wrap: nowrap !important;
   }
 
@@ -332,8 +353,8 @@
     align-items: center !important;
     background: #6b001f !important;
     border-radius: 100px !important;
-    height: 22px !important;
-    min-width: 80px !important;
+    height: 26px !important;
+    min-width: 98px !important;
     padding: 0 2px !important;
     gap: 0 !important;
     border: none !important;
@@ -347,9 +368,9 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 22px !important;
-    height: 22px !important;
-    min-width: 22px !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
@@ -376,10 +397,10 @@
     border: none !important;
     color: #fff !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 12px !important;
-    font-weight: 400 !important;
-    width: 26px !important;
-    min-width: 26px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    width: 34px !important;
+    min-width: 34px !important;
     text-align: center !important;
     padding: 0 !important;
     -moz-appearance: textfield !important;
@@ -399,9 +420,9 @@
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-    color: #999 !important;
+    color: #a6a2a2 !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 400 !important;
     text-decoration: underline !important;
     text-underline-offset: 2px !important;
@@ -413,6 +434,7 @@
     min-height: 0 !important;
     display: inline-flex !important;
     align-items: center !important;
+    white-space: nowrap !important;
   }
 
   .ensne-cart-items__remove:hover {
@@ -610,6 +632,31 @@
     .cart-drawer__dialog {
       max-width: 100% !important;
       width: 100% !important;
+    }
+
+    .ensne-cart-drawer__header {
+      padding: 18px 16px 0 !important;
+    }
+
+    .cart-drawer .cart-items__table-row {
+      grid-template-columns: 80px minmax(0, 1fr) auto !important;
+      column-gap: 14px !important;
+      padding: 18px 16px 22px !important;
+    }
+
+    .cart-drawer .cart-items__media {
+      width: 80px !important;
+    }
+
+    .cart-drawer .cart-items__media-container {
+      width: 80px !important;
+      height: 80px !important;
+    }
+
+    .cart-drawer .cart-items__title,
+    .cart-drawer .cart-items__price,
+    .cart-drawer .cart-items__price text-component {
+      font-size: 14px !important;
     }
 
     .cart-drawer__summary .cart__ctas {
