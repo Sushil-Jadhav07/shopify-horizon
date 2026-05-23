@@ -183,6 +183,78 @@
         "cta_border_colour": "#ffffff"
       }
     },
+    "sh_sub_collection_list_Dyhtpa": {
+      "type": "sh-sub-collection-list",
+      "blocks": {
+        "collection_Grx6Fy": {
+          "type": "collection",
+          "settings": {
+            "title": "Collection title",
+            "collection": ""
+          }
+        },
+        "collection_Jiyfp8": {
+          "type": "collection",
+          "settings": {
+            "title": "Collection title",
+            "collection": ""
+          }
+        },
+        "collection_rf6kE9": {
+          "type": "collection",
+          "settings": {
+            "title": "Collection title",
+            "collection": ""
+          }
+        },
+        "collection_PhPLiW": {
+          "type": "collection",
+          "settings": {
+            "title": "Collection title",
+            "collection": ""
+          }
+        },
+        "collection_f4EBkg": {
+          "type": "collection",
+          "settings": {
+            "title": "Collection title",
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_Grx6Fy",
+        "collection_Jiyfp8",
+        "collection_rf6kE9",
+        "collection_PhPLiW",
+        "collection_f4EBkg"
+      ],
+      "name": "SH: Sub collection list",
+      "settings": {
+        "title": "Our Collections",
+        "content": "",
+        "text_align": "center",
+        "column": 5,
+        "mob_column": "2",
+        "media_shape": "round",
+        "bg_color": "#ffffff",
+        "heading_color": "#000000",
+        "content_color": "#121212",
+        "colection_title": "#121212",
+        "arrow_color": "#000000",
+        "arrow_bg_color": "#ffffff",
+        "arrow_border_color": "#000000",
+        "arrow_size": 16,
+        "heading_font_size": 30,
+        "content_font_size": 16,
+        "coll_title_font_size": 18,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "mob_padding_top": 30,
+        "mob_padding_bottom": 30,
+        "sp_page_with": "1140"
+      }
+    },
     "ensne_product_grid_xeR6mf": {
       "type": "ensne-product-grid",
       "blocks": {
@@ -312,6 +384,7 @@
     "ensne_hero_PYYwhp",
     "ensne_tasting_menu_44NnQE",
     "ensne_product_editorial_t3w8pe",
+    "sh_sub_collection_list_Dyhtpa",
     "ensne_product_grid_xeR6mf",
     "ensne_product_editorial_4pBdtN",
     "ensne_early_access_q6nMdr"
