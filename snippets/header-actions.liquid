@@ -194,16 +194,19 @@
               {{ empty_cart_drawer_content }}
             {%- else -%}
               <div
-                class="cart-drawer__header"
+                class="cart-drawer__header ensne-cart-drawer__header"
                 id="cart-drawer-header"
               >
-                <h2
-                  class="cart-drawer__heading h4"
-                  id="cart-drawer-heading"
-                >
-                  {{ 'content.cart_title' | t }}
-                  {% render 'cart-bubble' %}
-                </h2>
+                <div class="ensne-cart-drawer__title-row">
+                  {%- assign ensne_count_padded = cart.item_count | prepend: '0' | slice: -2, 2 -%}
+                  <h2
+                    class="cart-drawer__heading ensne-cart-drawer__heading"
+                    id="cart-drawer-heading"
+                  >
+                    YOUR BAG<span class="ensne-cart-drawer__count">[ {{ ensne_count_padded }} ]</span>
+                  </h2>
+                  <span class="ensne-cart-drawer__serving-tag">serving soon</span>
+                </div>
 
                 <button
                   ref="closeButton"

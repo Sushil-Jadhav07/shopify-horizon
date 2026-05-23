@@ -178,6 +178,11 @@
                         {{- item.product.title -}}
                       </a>
                     </p>
+                    {%- if item.product.type != blank -%}
+                      <p class="ensne-cart-item__subtitle">{{ item.product.type }}</p>
+                    {%- else -%}
+                      <p class="ensne-cart-item__subtitle">serving soon</p>
+                    {%- endif -%}
                     {% if item.product.vendor and block_settings.vendor %}
                       <p>
                         {{ item.product.vendor }}
@@ -320,7 +325,7 @@
                     %}
 
                     <button
-                      class="button cart-items__remove"
+                      class="button cart-items__remove ensne-cart-items__remove"
                       type="button"
                       aria-label="{{ 'accessibility.remove_item' | t: title: item.title | escape }}"
                       on:click="/onLineItemRemove/{{ item.index | plus: 1 }}"
@@ -329,7 +334,7 @@
                         hidden
                       {% endif %}
                     >
-                      {{- 'icon-delete.svg' | inline_asset_content -}}
+                      <span aria-hidden="true">remove</span>
                       <span class="visually-hidden">{{ 'accessibility.remove' | t }}</span>
                     </button>
                   </div>
