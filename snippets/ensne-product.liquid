@@ -1,211 +1,347 @@
 <style>
-  /* ── ENSNE Product Page Styles ── */
-
-  /* Off-white background scoped to product template */
   main[data-template="product"] .product-information,
   main[data-template="product"] .section-background {
-    background-color: #f1f1f1 !important;
-    --color-background: #f1f1f1 !important;
+    background-color: #f6f3f3 !important;
+    --color-background: #f6f3f3 !important;
   }
 
-  /* Product type label — "THE TASTING MENU" */
-  main[data-template="product"] .ensne-product-type {
+  main[data-template="product"] .product-information {
+    padding-top: 18px !important;
+  }
+
+  main[data-template="product"] .product-information__grid {
+    align-items: start !important;
+  }
+
+  main[data-template="product"] .product-information__media {
+    align-self: start !important;
+  }
+
+  main[data-template="product"] .product-information__media .card-gallery,
+  main[data-template="product"] .product-information__media .media-gallery,
+  main[data-template="product"] .product-information__media slideshow-container,
+  main[data-template="product"] .product-information__media slideshow-slides {
+    width: 100% !important;
+  }
+
+  main[data-template="product"] .product-information__media img,
+  main[data-template="product"] .product-information__media video {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  main[data-template="product"] .product-details {
+    justify-content: flex-start !important;
+  }
+
+  main[data-template="product"] .product-details > .group-block {
+    max-width: 420px !important;
+    width: 100% !important;
+  }
+
+  main[data-template="product"] .group-block-content > .view-product-title {
+    display: none !important;
+  }
+
+  main[data-template="product"] .ensne-product-kicker {
+    margin: 0 !important;
     font-family: 'Archivo Narrow', sans-serif !important;
     font-size: 11px !important;
+    line-height: 1.1 !important;
     font-weight: 700 !important;
     letter-spacing: 0.22em !important;
     text-transform: uppercase !important;
-    color: #6b001f !important;
-    margin: 0 0 2px !important;
-    display: block !important;
+    color: #7b1631 !important;
   }
 
-  /* Product title — Cubao Free editorial display */
   main[data-template="product"] .product-details h1,
-  main[data-template="product"] .product-details [role="heading"][aria-level="3"] {
-    font-family: 'Cubao Free', sans-serif !important;
-    font-size: clamp(2.6rem, 5.5vw, 4.6rem) !important;
-    line-height: 0.93 !important;
-    letter-spacing: -0.01em !important;
-    text-transform: uppercase !important;
-    color: #0d0d0d !important;
-    font-weight: 400 !important;
+  main[data-template="product"] .product-details [role='heading'][aria-level='3'] {
     margin: 0 !important;
+    font-family: 'Cubao Free', sans-serif !important;
+    font-size: clamp(3rem, 5vw, 4.8rem) !important;
+    line-height: 0.9 !important;
+    letter-spacing: 0 !important;
+    text-transform: uppercase !important;
+    color: #111 !important;
+    font-weight: 400 !important;
   }
 
-  /* Price */
-  main[data-template="product"] .product-details .price {
+  main[data-template="product"] .ensne-product-subtitle {
+    margin: -2px 0 0 !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.06em !important;
+    font-size: 18px !important;
+    line-height: 1.05 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.18em !important;
+    text-transform: lowercase !important;
     color: #111 !important;
   }
 
-  main[data-template="product"] .product-details .compare-at-price {
-    font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 13px !important;
-    color: #999 !important;
+  main[data-template="product"] .ensne-product-copy,
+  main[data-template="product"] .ensne-product-copy p,
+  main[data-template="product"] .accordion .details-content,
+  main[data-template="product"] .accordion .details-content p {
+    margin: 0 !important;
+    font-family: 'Atkinson Hyperlegible', sans-serif !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0.01em !important;
+    color: #494949 !important;
   }
 
-  /* Divider line */
-  main[data-template="product"] .product-details hr,
-  main[data-template="product"] .product-details [class*="divider-block"] {
-    --color-border: #d0d0d0 !important;
-    border-color: #d0d0d0 !important;
-    background: #d0d0d0 !important;
+  main[data-template="product"] .ensne-product-copy em {
+    font-style: italic !important;
   }
 
-  /* Variant/size option legend */
-  main[data-template="product"] .variant-picker .variant-option legend,
-  main[data-template="product"] .variant-picker .variant-option .variant-option__swatch-value {
-    font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 11px !important;
-    letter-spacing: 0.18em !important;
-    text-transform: uppercase !important;
-    color: #888 !important;
-    font-weight: 700 !important;
+  main[data-template="product"] .variant-picker {
+    width: 100% !important;
   }
 
-  /* Size button layout */
-  main[data-template="product"] .variant-picker .variant-option--buttons {
+  main[data-template="product"] .variant-option {
+    width: 100% !important;
+  }
+
+  main[data-template="product"] .variant-option legend,
+  main[data-template="product"] .variant-option__swatch-value {
+    width: 100% !important;
     display: flex !important;
-    gap: 6px !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    margin: 0 0 10px !important;
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: lowercase !important;
+    color: #777 !important;
+  }
+
+  main[data-template="product"] .variant-option legend::after {
+    content: 'guide';
+    font-size: 11px;
+    color: #7b1631;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  main[data-template="product"] .variant-picker .variant-option--buttons {
+    gap: 8px !important;
     flex-wrap: wrap !important;
   }
 
-  /* Individual size button */
+  main[data-template="product"] .variant-picker .variant-option__button-label {
+    margin: 0 !important;
+  }
+
+  main[data-template="product"] .variant-picker .variant-option__button-label__pill,
+  main[data-template="product"] .variant-picker .strikethrough-variant,
+  main[data-template="product"] .quantity-selector-wrapper,
+  main[data-template="product"] .accelerated-checkout-block,
+  main[data-template="product"] shopify-accelerated-checkout,
+  main[data-template="product"] .product-form-text__error,
+  main[data-template="product"] .product__pickup-availabilities {
+    display: none !important;
+  }
+
   main[data-template="product"] .variant-picker .variant-option__button-label {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border: 1px solid #bbb !important;
-    border-radius: 3px !important;
-    padding: 7px 16px !important;
+    min-width: 44px !important;
+    min-height: 24px !important;
+    padding: 0 8px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #7b7b7b !important;
+  }
+
+  main[data-template="product"] .variant-picker .variant-option__button-label__text {
     font-family: 'Archivo Narrow', sans-serif !important;
     font-size: 12px !important;
-    letter-spacing: 0.1em !important;
+    line-height: 1 !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.02em !important;
     text-transform: uppercase !important;
-    font-weight: 700 !important;
-    color: #111 !important;
-    background: transparent !important;
-    cursor: pointer !important;
-    min-width: 44px !important;
-    transition: background 0.12s, color 0.12s, border-color 0.12s !important;
   }
 
-  main[data-template="product"] .variant-picker .variant-option__button-label:hover {
-    border-color: #111 !important;
-  }
-
-  /* Selected size */
   main[data-template="product"] .variant-picker .variant-option__button-label:has(input:checked) {
-    background: #0d0d0d !important;
-    color: #f1f1f1 !important;
-    border-color: #0d0d0d !important;
+    color: #111 !important;
   }
 
-  /* Sold-out size */
-  main[data-template="product"] .variant-picker .variant-option__button-label:has(input[aria-disabled="true"]) {
-    opacity: 0.32 !important;
-    cursor: default !important;
+  main[data-template="product"] .variant-picker .variant-option__button-label:has(input:checked) .variant-option__button-label__text {
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
   }
 
-  /* Hide the decorative pill inside size buttons */
-  main[data-template="product"] .variant-option__button-label__pill {
+  main[data-template="product"] .variant-picker .variant-option__button-label:has(input[aria-disabled='true']) {
+    opacity: 0.3 !important;
+  }
+
+  main[data-template="product"] .buy-buttons-block {
+    width: auto !important;
+    min-width: 162px !important;
+  }
+
+  main[data-template="product"] .buy-buttons-block product-form-component,
+  main[data-template="product"] .buy-buttons-block form {
+    display: block !important;
+  }
+
+  main[data-template="product"] .product-form-buttons {
+    display: block !important;
+  }
+
+  main[data-template="product"] .product-form-buttons > *:not(.quantity-selector-wrapper):not(.accelerated-checkout-block) {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  main[data-template="product"] .price {
+    margin: 0 !important;
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    color: #111 !important;
+  }
+
+  main[data-template="product"] .price .compare-at-price,
+  main[data-template="product"] .price .price__badge-sale,
+  main[data-template="product"] .price .price__badge-sold-out {
     display: none !important;
   }
 
-  /* ADD TO BAG button */
-  main[data-template="product"] .add-to-cart-button,
-  main[data-template="product"] button[name="add"] {
-    background: #0d0d0d !important;
-    color: #f1f1f1 !important;
-    border-radius: 100px !important;
-    border: none !important;
+  main[data-template="product"] .ensne-tax-note,
+  main[data-template="product"] .ensne-tax-note p {
+    margin: 0 !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 12px !important;
-    letter-spacing: 0.3em !important;
-    text-transform: uppercase !important;
-    font-weight: 700 !important;
-    min-height: 54px !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.02em !important;
+    color: #8f8b8b !important;
+  }
+
+  main[data-template="product"] .add-to-cart-button,
+  main[data-template="product"] button[name='add'] {
     width: 100% !important;
-    cursor: pointer !important;
-    transition: background 0.15s !important;
+    min-height: 28px !important;
+    height: 28px !important;
+    padding: 0 18px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #111 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    font-family: 'Archivo Narrow', sans-serif !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.24em !important;
+    text-transform: uppercase !important;
   }
 
   main[data-template="product"] .add-to-cart-button:hover:not([disabled]),
-  main[data-template="product"] button[name="add"]:hover:not([disabled]) {
-    background: #6b001f !important;
+  main[data-template="product"] button[name='add']:hover:not([disabled]) {
+    background: #7b1631 !important;
   }
 
-  main[data-template="product"] .add-to-cart-button[disabled],
-  main[data-template="product"] button[name="add"][disabled] {
-    background: #aaa !important;
-    cursor: not-allowed !important;
-    opacity: 1 !important;
-  }
-
-  /* Hide the SVG cart icon on product page button */
   main[data-template="product"] .add-to-cart-icon {
     display: none !important;
   }
 
-  /* "Added" checkmark burst — keep it visible */
-  main[data-template="product"] .add-to-cart__added-icon svg {
-    stroke: #f1f1f1 !important;
-    fill: none !important;
+  main[data-template="product"] .add-to-cart__added {
+    display: none !important;
   }
 
-  /* Description text */
-  main[data-template="product"] .product-details .rte,
-  main[data-template="product"] .product-details .rte p {
-    font-family: 'Atkinson Hyperlegible', sans-serif !important;
-    font-size: 13px !important;
-    line-height: 1.75 !important;
-    color: #555 !important;
-    letter-spacing: 0.01em !important;
-  }
-
-  /* Accordion container */
   main[data-template="product"] .accordion {
-    --color-background: transparent !important;
+    margin-top: 2px !important;
+    --color-border: #b9b5b5 !important;
   }
 
-  /* Accordion section header */
+  main[data-template="product"] .accordion accordion-custom .details {
+    border-radius: 0 !important;
+    border-color: #b9b5b5 !important;
+  }
+
   main[data-template="product"] .accordion .details__header {
+    min-height: 38px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     font-family: 'Archivo Narrow', sans-serif !important;
-    font-size: 11px !important;
-    letter-spacing: 0.22em !important;
-    text-transform: uppercase !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
     font-weight: 700 !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
     color: #111 !important;
   }
 
-  /* Accordion divider lines */
-  main[data-template="product"] .accordion--dividers accordion-custom .details {
-    --color-border: #d0d0d0 !important;
-    border-color: #d0d0d0 !important;
+  main[data-template="product"] .accordion .details__header .details__icon,
+  main[data-template="product"] .accordion .details__header .icon-caret {
+    display: none !important;
   }
 
-  main[data-template="product"] .accordion--dividers accordion-custom:first-child .details,
-  main[data-template="product"] .accordion--dividers accordion-custom:last-child .details {
-    border-color: #d0d0d0 !important;
+  main[data-template="product"] .accordion .details__header .icon-plus {
+    width: 10px !important;
+    height: 10px !important;
+    color: #7b1631 !important;
   }
 
-  /* Accordion body content */
-  main[data-template="product"] .accordion .details-content .rte,
-  main[data-template="product"] .accordion .details-content p {
-    font-family: 'Atkinson Hyperlegible', sans-serif !important;
-    font-size: 13px !important;
-    line-height: 1.75 !important;
-    color: #555 !important;
+  main[data-template="product"] .accordion .details-content {
+    padding: 0 0 14px !important;
   }
 
-  /* Product details padding */
+  main[data-template="product"] .sticky-add-to-cart {
+    display: none !important;
+  }
+
   @media screen and (min-width: 750px) {
+    main[data-template="product"] .product-information.section--page-width {
+      padding-inline: 40px !important;
+    }
+
+    main[data-template="product"] .product-information__grid.product-information--media-left {
+      grid-template-columns: minmax(540px, 1.12fr) minmax(320px, 0.72fr) !important;
+      column-gap: 48px !important;
+    }
+
+    main[data-template="product"] .product-information__grid.product-information--media-left .product-information__media {
+      padding-right: 0 !important;
+    }
+
+    main[data-template="product"] .product-information__grid.product-information--media-left .product-details {
+      padding-left: 0 !important;
+      padding-top: 18px !important;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    main[data-template="product"] .product-information {
+      padding-top: 0 !important;
+    }
+
     main[data-template="product"] .product-details {
-      padding-inline-start: 32px !important;
+      margin-top: 18px !important;
+    }
+
+    main[data-template="product"] .product-details > .group-block {
+      max-width: none !important;
+    }
+
+    main[data-template="product"] .product-details h1,
+    main[data-template="product"] .product-details [role='heading'][aria-level='3'] {
+      font-size: 2.5rem !important;
+    }
+
+    main[data-template="product"] .ensne_product_cta_group,
+    main[data-template="product"] .buy-buttons-block {
+      min-width: 0 !important;
     }
   }
 </style>
