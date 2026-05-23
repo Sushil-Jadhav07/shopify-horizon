@@ -189,7 +189,7 @@
         "product_card_xVQQNx": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "three-magical-words",
             "card_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_24_10_AM.png",
             "custom_name": "frame necklace",
             "custom_price": "₹1,700",
@@ -200,7 +200,7 @@
         "product_card_UwaUNa": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "crimson-crime-boxy-fit-tee",
             "card_image": "shopify://shop_images/ChatGPT_Image_May_20_2026_12_26_26_AM.png",
             "custom_name": "three magical words",
             "custom_price": "₹15,000",
