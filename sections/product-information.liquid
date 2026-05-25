@@ -176,10 +176,6 @@
   additional_blocks: additional_blocks
 %}
 
-{% if request.page_type == 'product' %}
-  {% render 'ensne-size-guide', product: closest.product %}
-{% endif %}
-
 {% stylesheet %}
   .sticky-add-to-cart__bar {
     position: fixed;

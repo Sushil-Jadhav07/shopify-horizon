@@ -222,6 +222,28 @@
                 "variant_style": "buttons",
                 "show_swatches": false,
                 "alignment": "left",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              }
+            },
+            "ensne_size_chart": {
+              "type": "ensne-size-chart",
+              "name": "Size chart",
+              "settings": {
+                "label": "select a size",
+                "trigger_label": "guide",
+                "show_without_size_option": false,
+                "heading": "SIZE GUIDE",
+                "subtitle": "All measurements are in inches.",
+                "size_heading": "SIZE",
+                "chest_heading": "CHEST",
+                "shoulder_heading": "SHOULDER",
+                "length_heading": "LENGTH",
+                "manual_rows": "S | 42 | 17 | 24\nM | 43 | 17.5 | 25\nL | 44 | 18 | 26",
+                "note_heading": "NOTE:",
+                "notes": "This product does not follow regular fit sizing.\nIf you usually wear M in regular fit, we recommend choosing S in this oversized fit.\nSizes may differ from regular fit garments.",
                 "padding-block-start": 18,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -532,6 +554,7 @@
           },
           "block_order": [
             "group_icgrde",
+            "ensne_size_chart",
             "variant_picker_R3rGDr",
             "ensne_price_cta_group",
             "ensne_editorial_accordion"
