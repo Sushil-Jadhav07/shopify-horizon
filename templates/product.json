@@ -177,6 +177,7 @@
             "ensne_size_chart_DqDcUY": {
               "type": "ensne-size-chart",
               "name": "Size chart",
+              "disabled": true,
               "settings": {
                 "label": "select a size",
                 "trigger_label": "guide",
