@@ -29,6 +29,26 @@
       assign show_block = true
     endif
   endif
+
+  assign size_guide_data = product_resource.metafields.custom.size_guide.value
+  assign size_guide_rows = blank
+  assign size_guide_notes = blank
+  if size_guide_data != blank
+    if size_guide_data.rows != blank
+      assign size_guide_rows = size_guide_data.rows
+      assign size_guide_notes = size_guide_data.notes
+    else
+      assign size_guide_rows = size_guide_data
+    endif
+  endif
+
+  assign chest_values = product_resource.metafields.custom.size_guide_chest.value | default: '' | split: ','
+  assign shoulder_values = product_resource.metafields.custom.size_guide_shoulder.value | default: '' | split: ','
+  assign length_values = product_resource.metafields.custom.size_guide_length.value | default: '' | split: ','
+  assign metafield_notes_text = product_resource.metafields.custom.size_guide_notes.value | default: ''
+  assign metafield_notes = metafield_notes_text | split: '|'
+  assign manual_rows = block.settings.manual_rows | newline_to_br | split: '<br />'
+  assign manual_notes = block.settings.notes | newline_to_br | split: '<br />'
 %}
 
 {% if show_block %}
@@ -50,21 +70,277 @@
       </button>
     </div>
 
-    {% render 'ensne-size-guide',
-      product: product_resource,
-      guide_id: guide_id,
-      heading: block.settings.heading,
-      subtitle: block.settings.subtitle,
-      size_heading: block.settings.size_heading,
-      chest_heading: block.settings.chest_heading,
-      shoulder_heading: block.settings.shoulder_heading,
-      length_heading: block.settings.length_heading,
-      manual_rows: block.settings.manual_rows,
-      notes: block.settings.notes,
-      note_heading: block.settings.note_heading
-    %}
+    <dialog-component
+      id="{{ guide_id }}"
+      class="ensne-size-guide"
+    >
+      <dialog
+        ref="dialog"
+        class="ensne-size-guide__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}"
+        scroll-lock
+        aria-labelledby="{{ guide_id }}-heading"
+      >
+        <div class="ensne-size-guide__shell">
+          <div class="ensne-size-guide__body">
+            <div class="ensne-size-guide__header">
+              <button
+                class="ensne-size-guide__close button-unstyled close-button"
+                type="button"
+                on:click="dialog-component/closeDialog"
+                aria-label="{{ 'actions.close_dialog' | t }}"
+              >
+                <span class="svg-wrapper">
+                  {{- 'icon-close.svg' | inline_asset_content -}}
+                </span>
+              </button>
+
+              <h2
+                id="{{ guide_id }}-heading"
+                class="ensne-size-guide__title"
+              >
+                {{ block.settings.heading | escape }}
+              </h2>
+
+              {% if block.settings.subtitle != blank %}
+                <p class="ensne-size-guide__subtitle">{{ block.settings.subtitle | escape }}</p>
+              {% endif %}
+            </div>
+
+            <div class="ensne-size-guide__table-wrap">
+              <table class="ensne-size-guide__table">
+                <thead>
+                  <tr>
+                    <th>{{ block.settings.size_heading | escape }}</th>
+                    <th>{{ block.settings.chest_heading | escape }}</th>
+                    <th>{{ block.settings.shoulder_heading | escape }}</th>
+                    <th>{{ block.settings.length_heading | escape }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if size_guide_rows != blank %}
+                    {% for row in size_guide_rows %}
+                      <tr>
+                        <td>{{ row.size | default: row.label | default: row.name }}</td>
+                        <td>{{ row.chest | default: row.bust }}</td>
+                        <td>{{ row.shoulder }}</td>
+                        <td>{{ row.length }}</td>
+                      </tr>
+                    {% endfor %}
+                  {% elsif block.settings.manual_rows != blank %}
+                    {% for manual_row in manual_rows %}
+                      {% assign manual_row_clean = manual_row | strip %}
+                      {% assign columns = manual_row_clean | split: '|' %}
+                      {% if manual_row_clean != blank %}
+                        <tr>
+                          <td>{{ columns[0] | strip }}</td>
+                          <td>{{ columns[1] | strip }}</td>
+                          <td>{{ columns[2] | strip }}</td>
+                          <td>{{ columns[3] | strip }}</td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  {% elsif size_option != blank %}
+                    {% for option_value in size_option.values %}
+                      <tr>
+                        <td>{{ option_value }}</td>
+                        <td>{{ chest_values[forloop.index0] | strip }}</td>
+                        <td>{{ shoulder_values[forloop.index0] | strip }}</td>
+                        <td>{{ length_values[forloop.index0] | strip }}</td>
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="ensne-size-guide__note">
+            <p class="ensne-size-guide__note-title">{{ block.settings.note_heading | escape }}</p>
+            <ul class="ensne-size-guide__note-list">
+              {% if size_guide_notes != blank %}
+                {% for note in size_guide_notes %}
+                  <li>{{ note }}</li>
+                {% endfor %}
+              {% elsif metafield_notes_text != blank %}
+                {% for note in metafield_notes %}
+                  {% assign note_clean = note | strip %}
+                  {% if note_clean != blank %}
+                    <li>{{ note_clean }}</li>
+                  {% endif %}
+                {% endfor %}
+              {% elsif block.settings.notes != blank %}
+                {% for note in manual_notes %}
+                  {% assign note_clean = note | strip %}
+                  {% if note_clean != blank %}
+                    <li>{{ note_clean }}</li>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <li>Refer to the garment measurements before choosing your size.</li>
+                <li>Compare against a similar garment you already own for best fit.</li>
+                <li>Measurements can vary slightly from one product to another.</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </dialog>
+    </dialog-component>
   </div>
 {% endif %}
+
+{% stylesheet %}
+  .ensne-size-guide__dialog {
+    --dialog-drawer-opening-animation: move-and-fade;
+    --dialog-drawer-closing-animation: move-and-fade;
+    margin: 0 0 0 auto;
+    width: min(42vw, 560px);
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #f6f3f3;
+    color: #111;
+    overflow: hidden;
+  }
+
+  .ensne-size-guide__shell {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100%;
+  }
+
+  .ensne-size-guide__body {
+    padding: 34px 42px 28px;
+  }
+
+  .ensne-size-guide__header {
+    position: relative;
+    padding-top: 52px;
+  }
+
+  .ensne-size-guide__close {
+    position: absolute;
+    top: 0;
+    right: -6px;
+    color: #111;
+    padding: 0;
+  }
+
+  .ensne-size-guide__close svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentcolor;
+    fill: none;
+    stroke-width: 1.25;
+  }
+
+  .ensne-size-guide__title {
+    margin: 0;
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ensne-size-guide__subtitle {
+    margin: 8px 0 0;
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    letter-spacing: 0.18em;
+    color: #9a9696;
+  }
+
+  .ensne-size-guide__table-wrap {
+    margin-top: 46px;
+  }
+
+  .ensne-size-guide__table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .ensne-size-guide__table th,
+  .ensne-size-guide__table td {
+    padding: 14px 8px;
+    text-align: center;
+    border-bottom: 1px solid #beb8b8;
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .ensne-size-guide__table th {
+    padding-bottom: 16px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ensne-size-guide__table th + th,
+  .ensne-size-guide__table td + td {
+    border-left: 1px solid #beb8b8;
+  }
+
+  .ensne-size-guide__table th:first-child,
+  .ensne-size-guide__table td:first-child {
+    width: 18%;
+  }
+
+  .ensne-size-guide__note {
+    background: #6b001f;
+    color: #fff;
+    padding: 32px 58px 34px;
+  }
+
+  .ensne-size-guide__note-title {
+    margin: 0 0 10px;
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ensne-size-guide__note-list {
+    margin: 0;
+    padding-left: 14px;
+  }
+
+  .ensne-size-guide__note-list li {
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 11px;
+    line-height: 1.55;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  @media screen and (max-width: 749px) {
+    .ensne-size-guide__dialog {
+      width: 100%;
+    }
+
+    .ensne-size-guide__body {
+      padding: 28px 18px 24px;
+    }
+
+    .ensne-size-guide__note {
+      padding: 24px 20px 28px;
+    }
+
+    .ensne-size-guide__table th,
+    .ensne-size-guide__table td {
+      font-size: 12px;
+      padding: 12px 6px;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
